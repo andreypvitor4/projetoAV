@@ -1,0 +1,45 @@
+@import '../variables';
+
+.home--container {
+  width: 60vw;
+  height: 30vh;
+  font-size: 3vw;
+  color: white;
+  @media(max-width: 700px) {
+    width: 80vw;
+    height: 35vh;
+    font-size: 5vw;
+  }
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 25vh auto ;
+  background-color: #eee;
+}
+
+.home--createRoute, .home--useRoute {
+  width: 48%;
+  height: 60%;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+.home--createRoute {
+  background-color: $primaryColor;
+}
+.home--useRoute {
+  background-color: #333;
+}
+
+.home--logOut {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40%;
+  margin-top: 4%;
+  border-radius: 10px;
+  background-color: rgb(26, 10, 71);
+}

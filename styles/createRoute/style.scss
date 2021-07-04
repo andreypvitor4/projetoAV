@@ -1,0 +1,60 @@
+@import '../variables';
+
+.logo {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 15px;
+  div {
+    width: 45px;
+    img {
+      width: 100%;
+    }
+  }
+}
+.cr--container {
+  position: relative;
+  width: 98vw;
+  margin: 15px auto;
+  border: solid 2px #333;
+  border-radius: 6px;
+  padding: 5px;
+}
+.cr--startPoint {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-bottom: solid 2px #333;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+  tr {
+    transition: all ease 0.1s;
+  }
+}
+.cr--inputDiv {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  font-weight: bold;
+  width: 100%;
+  &:first-child {
+    margin-right: 5px;
+  }
+  input {
+    width: 100%;
+    border-radius: 4px;
+    border: none;
+    border: solid 1px $primaryColor;
+    padding: 4px;
+  }
+}
+.twoInputsContainer {
+  width: 100%;
+  display: flex;
+  div:first-child {
+    flex: 2;
+  }
+  div:last-child {
+    flex: 1;;
+  }
+}

@@ -1,0 +1,11 @@
+@import '../variables';
+
+.ur--buttons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  button {
+    cursor: pointer;
+  }
+}

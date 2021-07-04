@@ -1,0 +1,185 @@
+.pts--points {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+}
+
+.pts--points tr {
+  -webkit-transition: all ease 0.1s;
+  transition: all ease 0.1s;
+}
+
+.pts--divAddButton {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.pts--addButton {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 50px;
+  height: 50px;
+  margin: 20px;
+  margin-right: 0px;
+  border-radius: 50%;
+  border: none;
+  background-color: #0c60e9ff;
+  color: white;
+  font-size: 35px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+
+.pts--pointOptionsScreen {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  visibility: hidden;
+}
+
+.pts--pointOptions {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100vw;
+  background-color: #333;
+  left: 0px;
+  -webkit-transition: all ease 0.5s;
+  transition: all ease 0.5s;
+  bottom: -100px;
+}
+
+.pts--pointOptions button {
+  margin: 15px;
+  width: 100px;
+  cursor: pointer;
+}
+
+.pts--pointOptions button:first-child {
+  background-color: #0c60e9ff;
+}
+
+.pts--pointOptions button:last-child {
+  background-color: #dd2a12;
+}
+
+.pts--pointOptionsShadow {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  -webkit-transition: all ease 0.5s;
+  transition: all ease 0.5s;
+  opacity: 0%;
+}
+
+.pts--pointOptionsScreen.pts--activeOptions {
+  visibility: visible;
+}
+
+.pts--pointOptionsScreen.pts--activeOptions .pts--pointOptionsShadow {
+  opacity: 30%;
+}
+
+.pts--pointOptionsScreen.pts--activeOptions .pts--pointOptions {
+  bottom: 0px;
+}
+
+.pts--areYouSureScreen {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.452);
+  -webkit-transition: all ease 0.3s;
+  transition: all ease 0.3s;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.pts--areYouSure {
+  position: fixed;
+  margin: auto;
+  padding: 20px;
+  border: 4px solid #333;
+  border-radius: 6px;
+  background-color: #e7e7e7;
+  font-weight: bold;
+}
+
+.pts--areYouSure th {
+  padding: 10px;
+  background-color: #0c60e9ff;
+}
+
+.pts--areYouSure table {
+  margin-bottom: 30px;
+}
+
+.pts--areYouSure button {
+  cursor: pointer;
+}
+
+.pts--areYouSure div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.pts--areYouSure div button:last-child {
+  background-color: #333;
+}
+
+.pts--areYouSureScreen.pts--deleteActiveClass {
+  visibility: visible;
+  opacity: 100;
+}
+/*# sourceMappingURL=style.css.map */
