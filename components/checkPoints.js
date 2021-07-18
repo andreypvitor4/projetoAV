@@ -20,7 +20,6 @@ export default function CheckPoints(props) {
 
   }, [props.allCheckPoints, props.allCities]);
 
-
   return (
     <div>
       {orderedCheckPoints.length > 0 && (
