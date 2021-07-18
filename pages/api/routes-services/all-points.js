@@ -12,13 +12,17 @@ export default async function allpoints(req, res) {
 
   if(req.method === 'GET') {
     try {
-      const {db} = await connect()
-      
-      const response = await db.collection('points').find()
-      const items = await response.toArray()
+      const data = req.query
+      const {db, client} = await connect()
+  
+      const response = await db.collection(`${req.userNameInDb}${req.userId}`)
+      .findOne({routeName: data.routeName})
+      await client.close()
 
-      if(!!items) {
-        return res.status(200).json(items)
+      if(!!response) {
+        return res.status(200).json(response.points)
+      }else {
+        return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
       }
 
     } catch (error) {

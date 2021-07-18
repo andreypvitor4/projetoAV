@@ -37,7 +37,7 @@
 
 .npf--formContainer.npf--activeForm .npf--formShadow {
   visibility: visible;
-  opacity: 50%;
+  opacity: 60%;
 }
 
 .npf--form {
@@ -54,10 +54,17 @@
 }
 
 .npf--formContainer.npf--activeForm .npf--form {
-  width: 90%;
-  height: 80vh;
+  width: 40%;
+  height: 65%;
   margin-bottom: 50px;
-  overflow: scroll;
+}
+
+@media (max-width: 700px) {
+  .npf--formContainer.npf--activeForm .npf--form {
+    width: 90%;
+    height: 80vh;
+    overflow: scroll;
+  }
 }
 
 .npf--inputDiv {

@@ -13,16 +13,14 @@ export default function Home() {
       </Head>
 
     <nav className="home--container">
-      <Link href="/create-route">
+      <Link href="/manage-routes">
         <a className="home--createRoute">
-          <p>Criar Rota</p>
+          <p>Minhas rotas</p>
         </a>
       </Link>
-      <Link href="/use-route">
-        <a className="home--useRoute">
-          <p>Utilizar Rota</p>
-        </a>
-      </Link>
+      <a className="home--useRoute" href="#footer--contact">
+        <p>Contatos</p>
+      </a>
     </nav>
 
     <FooterComponent />

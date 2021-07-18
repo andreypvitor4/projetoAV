@@ -7,6 +7,8 @@ export const AuthContext = createContext({})
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loginError, setLoginError] = useState(false);
+  const [rCount, setRCount] = useState(null);
+  
 
   useEffect(() => {
     const { 'AV--token': token } = parseCookies()
@@ -22,6 +24,7 @@ export function AuthProvider({ children }) {
           return res.json()
         }).then( data => {
           setUser(data.user)
+          setRCount(data.user.rCount)
         })
       }
 
@@ -49,6 +52,7 @@ export function AuthProvider({ children }) {
         })
     
         setUser(user)
+        setRCount(user.rCount)
         
         redirect && Router.push('/')
         
@@ -63,7 +67,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, signIn, loginError }}>
+    <AuthContext.Provider value={{ user, setUser, signIn, loginError, rCount, setRCount}}>
       {children}
     </AuthContext.Provider>
   )

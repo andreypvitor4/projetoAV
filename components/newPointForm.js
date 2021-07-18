@@ -1,12 +1,14 @@
 import { parseCookies } from 'nookies'
 import { useRef } from 'react'
+import { useRouter } from 'next/router'
 
 export default function NewPointForm(props) {
+  const router = useRouter()
   const cancelButtonRef = useRef(null)
   
   function resetInputs() {
     props.updateInputs({
-      id: '',
+      id: 0,
       cep: '',
       estado: '',
       cidade: '',
@@ -34,12 +36,24 @@ export default function NewPointForm(props) {
   }
 
   function handleSetInputs(e) {
-    if(props.allPoints.length === 0 && props.inputs.id === '0') {
+    if(props.allPoints.length === 0) {
       props.updateInputs({jaPassou: true})
     }else {
       props.updateInputs({jaPassou: false})
     }
     props.updateInputs({[e.target.name]: e.target.value})
+  }
+
+  function setInputsIndex() {
+    let pointsIndexes = props.allPoints.map( elem => elem.id )
+    let lastIndex = props.allPoints.length === 0? -1 : Math.max(...pointsIndexes)
+    let newIndex = lastIndex + 1
+    props.updateInputs({id: newIndex})
+  }
+
+  function rs(string) {
+    let normalizedString = string.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+    return normalizedString.toLowerCase()
   }
   
   async function handleSubmitForm(e) {
@@ -47,7 +61,7 @@ export default function NewPointForm(props) {
     const { 'AV--token': token } = parseCookies()
     
     if(props.submitFormOption === 'add') {
-      const data = await fetch('http://10.0.1.10:3000/api/routes-services/add-point', {
+      const data = await fetch(`http://10.0.1.10:3000/api/routes-services/add-point?routeName=${router.query.routeName}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -57,11 +71,16 @@ export default function NewPointForm(props) {
       })
       if(data.status === 200) {
         props.setAllPoints(allPoints => [...allPoints, props.inputs])
+
+        if(props.allCities.indexOf(rs(props.inputs.cidade)) == -1) {
+          props.setAllCities(prev => [...prev, rs(props.inputs.cidade)])
+        }
+
         resetInputs()
       }
     }
     if(props.submitFormOption === 'update') {
-      const data = await fetch('http://10.0.1.10:3000/api/routes-services/update-point', {
+      const data = await fetch(`http://10.0.1.10:3000/api/routes-services/update-point?routeName=${router.query.routeName}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -81,6 +100,13 @@ export default function NewPointForm(props) {
     }
   }
 
+  function handleMaxChar(e, max) {
+    let maxChar = e.currentTarget.value
+    if(e.currentTarget.value.length > max) {
+      e.currentTarget.value = maxChar.slice(0,max)
+    }
+  }
+
   function handleRemoveForm() {
     props.setActiveFormClass('')
   }
@@ -90,42 +116,79 @@ export default function NewPointForm(props) {
         <div className="npf--formShadow"></div>
         
         <form className="npf--form" onSubmit={handleSubmitForm}>
-          <div className="npf--inputDiv">
-            <label htmlFor="npf--id">id</label>
-            <input type="text" id="npf--id" name="id" value={props.inputs.id} onChange={handleSetInputs}/>
-          </div>
 
           <div className="npf--inputDiv">
             <label htmlFor="npf--cep">Cep</label>
-            <input type="text" id="npf--cep" name="cep" value={props.inputs.cep} onChange={handleSetInputs} onBlur={handleCep}/>
+            <input 
+              type="text" 
+              id="npf--cep" 
+              name="cep" 
+              value={props.inputs.cep} 
+              onChange={e => {handleMaxChar(e, 20); handleSetInputs(e);}} 
+              onBlur={handleCep} 
+              onClick={setInputsIndex}
+            />
           </div>
           
           <div className="twoInputsContainer">
             <div className="npf--inputDiv">
-              <label htmlFor="cidade">Cidade</label>
-              <input type="text" id="cidade" name="cidade" value={props.inputs.cidade} onChange={handleSetInputs}/>
+              <label htmlFor="cidade">Cidade*</label>
+              <input 
+                type="text" 
+                id="cidade" 
+                name="cidade"
+                required
+                value={props.inputs.cidade} 
+                onChange={e => {handleMaxChar(e, 30); handleSetInputs(e);}}
+                onBlur={setInputsIndex}
+              />
             </div>
 
             <div className="npf--inputDiv">
-              <label htmlFor="npf--estado">Estado</label>
-              <input type="text" id="npf--estado" name="estado" value={props.inputs.estado} onChange={handleSetInputs}/>
+              <label htmlFor="npf--estado">Estado*</label>
+              <input 
+                type="text" 
+                id="npf--estado" 
+                name="estado"
+                required
+                value={props.inputs.estado} 
+                onChange={e => {handleMaxChar(e, 2); handleSetInputs(e);}}
+              />
             </div>
           </div>
 
           <div className="npf--inputDiv">
             <label htmlFor="npf--bairro">Bairro</label>
-            <input type="text" id="npf--bairro" name="bairro" value={props.inputs.bairro} onChange={handleSetInputs}/>
+            <input 
+              type="text"
+              id="npf--bairro"
+              name="bairro"
+              value={props.inputs.bairro}
+              onChange={e => {handleMaxChar(e, 50); handleSetInputs(e);}}
+            />
           </div>
 
           <div className="twoInputsContainer">
             <div className="npf--inputDiv">
               <label htmlFor="npf--rua">Rua</label>
-              <input type="text" id="npf--rua" name="rua" value={props.inputs.rua} onChange={handleSetInputs}/>
+              <input 
+                type="text" 
+                id="npf--rua" 
+                name="rua" 
+                value={props.inputs.rua} 
+                onChange={e => {handleMaxChar(e, 50); handleSetInputs(e);}}
+              />
             </div>
 
             <div className="npf--inputDiv">
               <label htmlFor="npf--numero">Número</label>
-              <input type="text" id="npf--numero" name="numero" value={props.inputs.numero} onChange={handleSetInputs}/>
+              <input 
+                type="text"
+                id="npf--numero"
+                name="numero"
+                value={props.inputs.numero}
+                onChange={e => {handleMaxChar(e, 10); handleSetInputs(e);}}
+              />
             </div>
           </div>
 

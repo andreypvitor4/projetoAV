@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { AuthContext } from '../contexts/authContext'
 import Account from './account'
 
@@ -7,19 +7,12 @@ import Account from './account'
 export default function HeaderComponent() {
     const { user } = useContext(AuthContext)
     const accountText = !!user ? user.email : 'Log in'
+    const [userMenuActiveClass, setUserMenuActiveClass] = useState('');
 
-    function clickUserMenu(e) {
-        const userMenu = document.querySelector('#header__userMenu')
-        userMenu.classList.toggle('userMenuActive')
-        const shadow = document.querySelector('#header__shadowBackground')
-        shadow.classList.toggle('userMenuActive')
-        const active = userMenu.classList.contains('userMenuActive')
-        e.currentTarget.setAttribute('aria-expanded', active)
-        if(active) {
-            e.currentTarget.setAttribute('aria-label', 'Fechar Menu')
-        }else {
-            e.currentTarget.setAttribute('aria-label', 'Abrir Menu')
-        }
+    function clickUserMenu() {
+        const nextClassStatus = userMenuActiveClass == 'userMenuActive'?
+            '': 'userMenuActive';
+            setUserMenuActiveClass(nextClassStatus)
       }
 
     return (
@@ -48,7 +41,11 @@ export default function HeaderComponent() {
                 
             </div>
 
-            <Account />
+            <Account 
+                userMenuActiveClass={userMenuActiveClass}
+                setUserMenuActiveClass={setUserMenuActiveClass}
+                clickUserMenu={clickUserMenu}
+            />
 
         </header>
     )

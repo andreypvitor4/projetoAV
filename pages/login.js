@@ -1,21 +1,34 @@
 import Head from 'next/head'
 import Link from "next/link"
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/authContext'
 
 export default function Login() {
   const { signIn, loginError } = useContext(AuthContext)
+  const [inputs, setInputs] = useState({
+    email: '',
+    password: '',
+  });
   
   function submitLogin(e) {
-      e.preventDefault(0)
-  
-      const login = document.querySelector('#login__user')
-      const password = document.querySelector('#login__password')
-      let data = {
-        email: login.value,
-        password: password.value,
-      }
-      signIn(data)
+      e.preventDefault()
+
+      signIn(inputs)
+  }
+
+  function updateInputs(newInputs) {
+    setInputs(prevState => {
+      return (
+        {
+        ...prevState,
+        ...newInputs
+        }
+      )
+    })
+  }
+
+  function handleSetInputs(e) {
+    updateInputs({[e.target.name]: e.target.value})
   }
 
   return(
@@ -26,9 +39,9 @@ export default function Login() {
 
       <div className="login--container">
           <div>
-          <Link href="/">
-            <a className="login--logo"> <img src="logoAV.png" alt="logo" /> </a>
-          </Link>
+            <Link href="/">
+              <a className="login--logo"> <img src="logoAV.png" alt="logo" /> </a>
+            </Link>
           </div>
           <form className="login--form" onSubmit={submitLogin}>
             <h2>Login</h2>
@@ -36,19 +49,21 @@ export default function Login() {
               <label htmlFor="login__user">Email</label>
               <input 
                 type="email" 
-                id="login__user"
+                name="email"
                 placeholder="Digite seu email"
                 autoComplete="email" 
-                required 
+                required
+                onChange={handleSetInputs}
               />
             </div>
             <div className="login--password">
               <label htmlFor="login__password">Senha</label>
               <input 
                 type="password" 
-                id="login__password"
+                name="password"
                 autoComplete="current-password"
-                required 
+                required
+                onChange={handleSetInputs}
               />
             </div>
             <div className="login--continue">

@@ -27,30 +27,30 @@ export default function FooterComponent() {
             <div className="footer--container">
 
                 <div className="footer--info">
-                    <h2>Garantias</h2>
-                    <p>Pagamentos 100% seguros</p>
-                    <p>Devolução grátis dentro de 10 dias a partir da compra</p>
-                    <p>Caso haja dúvidas, por favor entre em contato</p>
+                    <h2>Acesso</h2>
+                    <p>Caso tenha interesse em testar</p>
+                    <p>esse serviço, entre em contato</p>
+                    <p>para solicitar acesso</p>
                 </div>
 
                 <div className="footer--contact">
+                    <a name="footer--contact"></a>
                     <h2>Contatos</h2>
                     <p><FontAwesomeIcon className="footer--iconImage" icon={faWhatsapp} style={{
                         width: '15px'
-                    }}/> (19) 9 9999-9999</p>
+                    }}/> (19) 9 9997-4291</p>
                     <p><FontAwesomeIcon className="footer--iconImage" icon={faWhatsapp} style={{
                         width: '15px'
-                    }}/> (19) 9 9777-7777</p>
+                    }}/> (19) 3481-6123</p>
                     <p> <FontAwesomeIcon className="footer--iconImage" icon={faEnvelope} style={{
                         width: '15px'
-                    }}/> larakelly@lojalk.com</p>
+                    }}/> andreypvitor@gmail.com</p>
                 </div>
 
                 <div className="footer--contact">
-                    <h2>Lara</h2>
-                    <p>A lara é um lixo</p>
-                    <p>A lara é um lixo</p>
-                    <p>A lara é um lixo</p>
+                    <h2>Projeto</h2>
+                    <p>Esse é um projeto pessoal</p>
+                    <p>sem fins lucrativos</p>
                 </div>
 
             </div>

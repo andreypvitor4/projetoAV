@@ -12,13 +12,24 @@ export default async function deletePoint(req, res) {
 
   if(req.method === 'DELETE') {
     let data = req.body
-    const {db} = await connect()
+    let query = req.query
+    const {db, client} = await connect()
     try {
-      const response = await db.collection('points').deleteOne({id: data.id})
+      const response = await db.collection(`${req.userNameInDb}${req.userId}`)
+      .updateOne({routeName: query.routeName}, {
+        $pull: {
+          points: {
+            id: data.id
+          }
+        }
+      })
+      await client.close()
       
-      if(response.deletedCount == 1) {
+      if(response.result.ok == 1) {
         return res.status(200).json({message: 'Ponto deletado com sucesso'})
-      } 
+      }else {
+        return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+      }
 
     } catch (error) {
       console.log(error)

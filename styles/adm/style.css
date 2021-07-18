@@ -1,0 +1,50 @@
+.adm--search {
+  width: 100%;
+  margin-top: 50px;
+  padding: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.adm--search input {
+  width: 50%;
+  height: 40px;
+  border: 1px solid #0c60e9ff;
+  border-radius: 4px;
+}
+
+.adm--search button {
+  font-size: 12pt;
+  width: 100px;
+  height: 40px;
+  line-height: 10px;
+}
+
+.adm--search select {
+  height: 40px;
+  border: 1px solid #0c60e9ff;
+  border-radius: 4px;
+}
+
+.adm--searchedUsers {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  margin-top: 50px;
+}
+
+.adm--searchedUsers table {
+  width: 95%;
+}
+/*# sourceMappingURL=style.css.map */

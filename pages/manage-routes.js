@@ -1,11 +1,18 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { parseCookies } from 'nookies'
+import Head from 'next/head'
+import Routes from '../components/routes';
 
 export default function ManageRoutes() {
+  const cancelButtonRef = useRef(null)
+  const [authError, setAuthError] = useState(false);
   const [activeClass, setActiveClass] = useState('');
+  const [allRoutes, setAllRoutes] = useState([]);
   const [inputs, setInputs] = useState({
     routeName: '',
     routeDescription: '',
+    routeStatus: 'inacabada',
+    points: [],
   });
 
   function updateInputs(newInputs) {
@@ -27,7 +34,6 @@ export default function ManageRoutes() {
     e.preventDefault()
 
     const { 'AV--token': token } = parseCookies()
-    console.log(inputs)
 
     const data = await fetch('http://10.0.1.10:3000/api/routes-services/new-route', {
         method: 'POST',
@@ -39,64 +45,95 @@ export default function ManageRoutes() {
       })
 
     if(data.status === 200) {
-      console.log('ok')
+      cancelButtonRef.current.click()
+      const route = await data.json()
+      setAllRoutes(prev => ([...prev, route]))
+      updateInputs({routeName: '', routeDescription: ''})
+    }
+    if(data.status === 401) {
+      cancelButtonRef.current.click()
+      setAuthError(true)
+    }
+  }
+
+  function handleMaxChar(e, max) {
+    let maxChar = e.currentTarget.value
+    if(e.currentTarget.value.length > max) {
+      e.currentTarget.value = maxChar.slice(0,max)
     }
   }
 
   return (
     <div>
-      <main className="cr--container">
-        <div className="pts--points">
-          <h2>Rotas</h2>
+
+      <Head>
+        <title>Minhas rotas</title>
+      </Head>
+
+      <main className="mr--container">
+        <div className="mr--routes">
+          <h2 style={{marginLeft: '2.5%'}}>Minhas rotas</h2>
         </div>
 
-        <div className="pts--divAddButton">
+        <Routes allRoutes={allRoutes} setAllRoutes={setAllRoutes}/>
+
+        {authError && (
+          <div className="mr--authError">
+            <p>Você não tem autorização para fazer esta ação, entre em contato para adquirir.</p>
+          </div>
+        )}
+
+        <div className="mr--divAddButton">
           <button 
-          className="pts--addButton"
-          onClick={() => { setActiveClass('npf--activeForm') }}
+          className="mr--addButton"
+          onClick={() => { setActiveClass('mr--activeForm') }}
           >
             +
           </button>
         </div>
       </main>
 
-      <div className={`npf--formContainer ${activeClass}`}>
-        <div className="npf--formShadow"></div>
+      <div className={`mr--formContainer ${activeClass}`}>
+        <div className="mr--formShadow"></div>
 
-        <form className="npf--form" onSubmit={handleSubmitForm}>
+        <form className="mr--form" onSubmit={handleSubmitForm}>
           <h2>Digite o nome da nova rota</h2>
 
-          <div className="npf--inputDiv">
+          <div className="mr--inputDiv">
             <label htmlFor="npf--name">nome</label>
             <input 
               type="text" 
-              id="npf--name" 
-              name="routeName" 
+              name="routeName"
+              required
               value={inputs.routeName} 
-              onChange={handleSetInputs}
+              onChange={e => {handleMaxChar(e, 30); handleSetInputs(e);}} 
             />
           </div>
 
-          <div className="npf--inputDiv">
+          <div className="mr--inputDiv">
             <label htmlFor="npf--description">descrição</label>
             <input 
               type="text" 
-              id="npf--description" 
               name="routeDescription" 
               value={inputs.routeDescription} 
-              onChange={handleSetInputs}
+              onChange={e => {handleMaxChar(e, 120); handleSetInputs(e);}} 
             />
           </div>    
 
         <div>
           <button type="submit">Criar rota</button>
-          <button type="button" onClick={() => {setActiveClass('')}}>Cancelar</button>
+          <button 
+            type="button" 
+            ref={cancelButtonRef} 
+            onClick={() => {setActiveClass('')}}
+            >
+              Cancelar
+          </button>
         </div>
 
       </form>
           
       </div>
-      
 
     </div>
   )

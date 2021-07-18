@@ -1,31 +1,49 @@
 import { parseCookies } from 'nookies'
-import { useState, useEffect } from 'react';
-import CheckPoints from "../components/checkPoints";
+import { useState, useEffect, useCallback, useContext } from 'react';
+import { useRouter } from 'next/router'
+import Head from 'next/head'
+import { AuthContext } from '../../contexts/authContext'
+import CheckPoints from "../../components/checkPoints";
+
 
 export default function UserRoute() {
+  const { setRCount } = useContext(AuthContext)
+
+  const [authError, setAuthError] = useState(false);
   const [allPoints, setAllPoints] = useState([]);
   const [allCheckPoints, setAllCheckPoints] = useState([]);
+  const [allCities, setAllCities] = useState([]);
+  const router = useRouter()
 
-  useEffect(() => {
-    getAllPoints()
-  }, []);
+  const getAllPoints = useCallback(async function() {
+    if(!router.query.routeName) return
 
-  async function getAllPoints() {
-      const { 'AV--token': token } = parseCookies()
-        
-      const data = await fetch('http://10.0.1.10:3000/api/routes-services/all-points', {
-        method: 'GET',
-        headers: { 
-          'Content-Type': 'application/json',
-          'authorization': `Bearer ${token}`,
-        },
-      })
-      const points = await data.json()
-      const checkPoints = points.filter(elem => elem.jaPassou)
+    const { 'AV--token': token } = parseCookies()
 
-      setAllPoints(points)
-      setAllCheckPoints(checkPoints)
-  }
+    const data = await fetch(`http://10.0.1.10:3000/api/routes-services/all-points?routeName=${router.query.routeName}`, {
+      method: 'GET',
+      headers: { 
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${token}`,
+      },
+    })
+    const points = await data.json()
+    const checkPoints = points.filter(elem => elem.jaPassou)
+
+    setAllPoints(points)
+    setAllCheckPoints(checkPoints)
+
+    const cities = checkPoints.map(elem => elem.cidade).filter( (elem, key, cities) => (
+      key === cities.indexOf(elem)
+    ))
+
+    setAllCities(cities)
+}, [router])
+
+useEffect(() => {
+  getAllPoints()
+}, [getAllPoints]);
+
 
   async function handleNextCheckPoint() {
     const OrderedCheckPoints = allCheckPoints.sort((a, b) => {
@@ -52,7 +70,7 @@ export default function UserRoute() {
       posicao: allCheckPoints.length,
     }
 
-    const res = await fetch('http://10.0.1.10:3000/api/routes-services/update-point', {
+    const res = await fetch(`http://10.0.1.10:3000/api/routes-services/update-point?routeName=${router.query.routeName}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -64,6 +82,17 @@ export default function UserRoute() {
     if(res.status === 200 && data.status === 200) {
       updateAllPoints(updatedNextPoint)
       setAllCheckPoints( allCheckPoints => [...allCheckPoints, updatedNextPoint] )
+      setRCount(prev => prev - 1)
+
+      const cities = [...allCheckPoints, updatedNextPoint].map(elem => elem.cidade)
+      .filter( (elem, key, cities) => (
+        key === cities.indexOf(elem)
+      ))
+  
+      setAllCities(cities)
+    }
+    if(data.status === 401) {
+      setAuthError(true)
     }
   }
 
@@ -82,16 +111,28 @@ export default function UserRoute() {
 
   return (
     <div>
+      <Head>
+        <title>Usar rota</title>
+      </Head>
+
       <main className="cr--container">
         <div className="ur--checkPoints">
-          <h2>Pontos de parada</h2>
+          <h2>Pontos de parada ({allCheckPoints.length})</h2>
         </div>
         <CheckPoints 
           allPoints={allPoints} 
           setAllPoints={setAllPoints}
           allCheckPoints={allCheckPoints}
           setAllCheckPoints={setAllCheckPoints}
+          allCities={allCities}
         />
+
+        {authError && (
+          <div className="mr--authError">
+            <p>Você esgotou o seu limite de requisições, entre em contato para adquirir mais.</p>
+          </div>
+        )}
+
         {!(allPoints.length === allCheckPoints.length) ?
           <div className="ur--buttons">
             <button onClick={handleNextCheckPoint}>Próximo ponto</button>
@@ -100,6 +141,7 @@ export default function UserRoute() {
             <button>Você chegou ao final</button>
           </div>
         }
+        
       </main>
     </div>
   )

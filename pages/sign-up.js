@@ -1,32 +1,46 @@
 import Head from 'next/head'
 import Link from "next/link"
-import { useState, useContext } from 'react'
+import { useState, useContext, useRef } from 'react'
 import { AuthContext } from '../contexts/authContext'
 import Router from 'next/router'
 
 export default function SignUp() {
   const [signUpError, setSignUpError] = useState(false);
   const { signIn } = useContext(AuthContext)
+  const sendButtonRef = useRef(null)
+  const confirmPasswordRef = useRef(null)
+
+  const [inputs, setInputs] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+  
+  function updateInputs(newInputs) {
+    setInputs(prevState => {
+      return (
+        {
+        ...prevState,
+        ...newInputs
+        }
+      )
+    })
+  }
+
+  function handleSetInputs(e) {
+    updateInputs({[e.target.name]: e.target.value})
+  }
 
   async function submitSignIn(e) {
     e.preventDefault()
-    const login = document.querySelector('#login__user')
-    const email = document.querySelector('#login__email')
-    const password = document.querySelector('#login__password')
-  
-    let data = {
-      name: login.value,
-      email: email.value,
-      password: password.value,
-    }
   
     const req = await fetch('http://10.0.1.10:3000/api/auth-services/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(inputs)
     })
     if(req.status === 200) {
-      await signIn(data, false)
+      await signIn(inputs, false)
       Router.push('/')
     }else {
       const reqData = await req.json()
@@ -36,7 +50,7 @@ export default function SignUp() {
 
   async function handleEmailAvailability(e) {
     const input = e.currentTarget
-    let validate = emailTextValidate(e.currentTarget.value)
+    let validate = emailTextValidate(input.value)
   
     if(validate) {
       const req = await fetch('http://10.0.1.10:3000/api/auth-services/email-availability', {
@@ -65,22 +79,23 @@ export default function SignUp() {
   }
 
   function handlePassword() {
-    const password = document.querySelector('#login__password')
-    const confirmPassword = document.querySelector('#login__confirmPassword')
-    const sendButton = document.querySelector('.login--button')
-    if(password.value.length < 6) {
-      confirmPassword.nextSibling.innerText = 'A senha deve conter no mínimo 6 caracteres'
-      confirmPassword.nextSibling.style.color = 'red'
+    const { password } = inputs
+    const confirmPassword = confirmPasswordRef.current.previousSibling.value
+    
+    const sendButton = sendButtonRef.current
+    if(password.length < 6) {
+      confirmPasswordRef.current.innerText = 'A senha deve conter no mínimo 6 caracteres'
+      confirmPasswordRef.current.style.color = 'red'
       sendButton.style.opacity = '40%'
       sendButton.disabled = true
     }else {
-      if(password.value !== confirmPassword.value) {
-        confirmPassword.nextSibling.innerText = 'As senhas não estão iguais'
-        confirmPassword.nextSibling.style.color = 'red'
+      if(password !== confirmPassword) {
+        confirmPasswordRef.current.innerText = 'As senhas não estão iguais'
+        confirmPasswordRef.current.style.color = 'red'
         sendButton.style.opacity = '40%'
         sendButton.disabled = true
       }else {
-        confirmPassword.nextSibling.innerText = ''
+        confirmPasswordRef.current.innerText = ''
         sendButton.style.opacity = '100%'
         sendButton.disabled = false
       }
@@ -118,10 +133,10 @@ export default function SignUp() {
               <label htmlFor="login__user">Nome de usuário</label>
               <input 
                 type="text" 
-                id="login__user"
+                name="name"
                 placeholder="Digite seu nome"
                 required
-                onChange={handleMaxChar}
+                onChange={e => {handleMaxChar(e); handleSetInputs(e)}}
               />
             </div>
             <div className="login--user">
@@ -129,11 +144,11 @@ export default function SignUp() {
               <div>
                 <input 
                   type="email" 
-                  id="login__email"
+                  name="email"
                   placeholder="Digite seu email"
                   autoComplete="email"
                   required
-                  onChange={handleMaxChar}
+                  onChange={e => {handleMaxChar(e); handleSetInputs(e)}}
                   onBlur={handleEmailAvailability}
                 /><span className="login--validate"></span>
               </div>
@@ -142,24 +157,26 @@ export default function SignUp() {
               <label htmlFor="login__password">Senha</label>
               <input 
                 type="password" 
-                id="login__password"
+                name="password"
                 autoComplete="current-password"
                 required
-                onChange={(e) => {handlePassword(e); handleMaxChar(e)}}
+                onChange={e => {handleSetInputs(e);handleMaxChar(e);}}
+                onBlur={handlePassword}
               />
             </div>
             <div className="login--password">
               <label htmlFor="login__confirmPassword">Confirmar senha</label>
               <input 
                 type="password" 
-                id="login__confirmPassword"
+                name="confirmPassword"
                 autoComplete="current-password"
                 required
-                onChange={(e) => {handlePassword(e); handleMaxChar(e)}}
-              /><span className="login--validate"></span>
+                onChange={handleMaxChar}
+                onBlur={handlePassword}
+              /><span className="login--validate" ref={confirmPasswordRef}></span>
             </div>
             <div className="login--continue">
-              <input className="login--button" type="submit" value="Criar conta"/>
+              <input className="login--button" type="submit" value="Criar conta" ref={sendButtonRef}/>
             </div>
           </form>
 

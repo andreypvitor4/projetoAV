@@ -12,16 +12,24 @@ export default async function savePoint(req, res) {
 
   if(req.method === 'POST') {
     const data = req.body
-    const {db} = await connect()
+    const query = req.query
+    const {db, client} = await connect()
 
     try {
-      const response = await db.collection('points').insertOne(data)
+      const response = await db.collection(`${req.userNameInDb}${req.userId}`)
+      .updateOne({routeName: query.routeName}, {
+        $push: {
+          points: data
+        }
+      })
+      await client.close()
 
-      if(!!response.ops[0]) {
+      if(response.result.ok == 1) {
         return res.status(200).json({message: 'cadastrado com sucesso.'})
       }
 
     } catch (error) {
+      console.log(error)
       return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
     }
 

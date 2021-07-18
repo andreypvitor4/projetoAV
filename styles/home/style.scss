@@ -1,29 +1,30 @@
 @import '../variables';
 
 .home--container {
-  width: 60vw;
-  height: 30vh;
-  font-size: 3vw;
+  width: 25vw;
+  height: 20vh;
   color: white;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-items: center;
+  margin: 20vh auto;
+  background-color: #eee;
   @media(max-width: 700px) {
     width: 80vw;
     height: 35vh;
-    font-size: 5vw;
   }
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin: 25vh auto ;
-  background-color: #eee;
 }
 
 .home--createRoute, .home--useRoute {
-  width: 48%;
+  width: 100%;
   height: 60%;
   border-radius: 5px;
+  margin: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 20px;
   font-weight: bold;
 }
 .home--createRoute {
@@ -33,13 +34,14 @@
   background-color: #333;
 }
 
-.home--logOut {
+.home--tittle {
+  width: 100%;
+  margin-top: 50px;
+  padding: 0px 10px;
+  font-size: 7pt;
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 40%;
-  margin-top: 4%;
-  border-radius: 10px;
-  background-color: rgb(26, 10, 71);
+  background-color: $primaryColor;
+  background-image: linear-gradient($primaryColor, #eee);
+  color: rgb(45, 41, 54);
 }

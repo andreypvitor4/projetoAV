@@ -8,10 +8,11 @@ async function auth(req, res) {
 
   if(req.method === 'POST') {
     const { email, password } = req.body
-    const { db } = await connect()
+    const { db, client } = await connect()
 
     try {
       const user = await db.collection('users').findOne({ email })
+      await client.close()
       if(!user) {
         return res.status(400).json({error: 'Usuário não existe'})
       }
@@ -25,7 +26,8 @@ async function auth(req, res) {
         user,
         token: generateToken({
           id: user._id,
-          permission: user.permission
+          permission: user.permission,
+          nameInDb: getNameOfEmail(user.email)
         })
       })
 
@@ -36,6 +38,11 @@ async function auth(req, res) {
   }else{
     res.status(400).json({error: 'Método de request incorreto'})
   }
+}
+
+function getNameOfEmail(email) {
+  const index = email.indexOf('@')
+  return email.slice(0, index)
 }
 
 export default auth

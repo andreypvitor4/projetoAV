@@ -6,10 +6,11 @@ export default async function emailAvailability(req, res) {
 
   if(req.method === 'POST') {
     const { email } = req.body
-    const { db } = await connect()
+    const { db, client } = await connect()
     
     try {
       const user = await db.collection('users').findOne({ email })
+      await client.close()
 
       return res.status(200).json({ emailAvailable: !user })
 

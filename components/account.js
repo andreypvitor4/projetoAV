@@ -1,39 +1,30 @@
-import { useContext } from 'react'
+import { useContext, useRef} from 'react'
 import { AuthContext } from '../contexts/authContext'
 import { destroyCookie } from 'nookies'
 
 
-export default function Account() {
-  const { user, setUser } = useContext(AuthContext)
-
-  function clickUserMenu(e) {
-    const userMenu = document.querySelector('#header__userMenu')
-    userMenu.classList.toggle('userMenuActive')
-    const shadow = document.querySelector('#header__shadowBackground')
-    shadow.classList.toggle('userMenuActive')
-    const active = userMenu.classList.contains('userMenuActive')
-    e.currentTarget.setAttribute('aria-expanded', active)
-    if(active) {
-        e.currentTarget.setAttribute('aria-label', 'Fechar Menu')
-    }else {
-        e.currentTarget.setAttribute('aria-label', 'Abrir Menu')
-    }
-  }
+export default function Account(props) {
+  const { user, setUser, rCount } = useContext(AuthContext)
+  const headerShadowRef = useRef(null)
 
   function handleLogOut(setUser) {
     return () => {
       destroyCookie(null, 'AV--token')
       setUser(null)
-      document.querySelector('.header--shadow').click()
+      headerShadowRef.current.click()
     }
   }
 
   return (
     <>
-      <div className="header--shadowBackground" id="header__shadowBackground"></div>
+      <div className={`header--shadowBackground ${props.userMenuActiveClass}`}></div>
 
-      <div className="header--user" id="header__userMenu">
-        <div className="header--shadow" onClick={clickUserMenu}>
+      <div className={`header--user ${props.userMenuActiveClass}`} id="header__userMenu">
+        <div 
+          className="header--shadow" 
+          ref={headerShadowRef} 
+          onClick={props.clickUserMenu}
+        >
           <div>
             X <span></span>
           </div>
@@ -43,10 +34,15 @@ export default function Account() {
           <h1>Usuário</h1>
           
           <div>
-            <div>
-              {user?.name}<br />
-            </div>
+            <p>{user?.name}</p>
             <p>{user?.email}</p>
+            <p>Criado em {(new Date(user?.date)).toLocaleDateString()}</p>
+            <p>Requisições restantes: {rCount}</p>
+            {rCount == 0 && (
+              <p style={{color: 'red', fontSize: '10pt'}}>
+                Entre em contato para adquirir o direto de fazer mais requisições
+              </p>
+            )}
             <button onClick={handleLogOut(setUser)}>Log out</button>
           </div>
 

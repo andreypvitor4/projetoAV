@@ -34,8 +34,8 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   margin: 20px;
   margin-right: 0px;
   border-radius: 50%;
@@ -110,7 +110,7 @@
 }
 
 .pts--pointOptionsScreen.pts--activeOptions .pts--pointOptionsShadow {
-  opacity: 30%;
+  opacity: 40%;
 }
 
 .pts--pointOptionsScreen.pts--activeOptions .pts--pointOptions {
@@ -141,12 +141,29 @@
 
 .pts--areYouSure {
   position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 40%;
   margin: auto;
   padding: 20px;
   border: 4px solid #333;
   border-radius: 6px;
   background-color: #e7e7e7;
   font-weight: bold;
+}
+
+@media (max-width: 700px) {
+  .pts--areYouSure {
+    width: 95%;
+  }
 }
 
 .pts--areYouSure th {

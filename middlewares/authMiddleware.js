@@ -26,6 +26,7 @@ const authMiddleware = initMiddleware(
   
       req.userId = decoded.id
       req.userPermission = decoded.permission
+      req.userNameInDb = decoded.nameInDb
       return next()
     })
   }
