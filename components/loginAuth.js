@@ -10,7 +10,7 @@ export default function LoginAuth({ children }) {
     }
 
     if(token) {
-      fetch('http://10.0.1.10:3000/api/auth-services/authenticated-user', {
+      fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/authenticated-user`, {
         method: 'GET',
         headers: { 
           'Content-Type': 'application/json',

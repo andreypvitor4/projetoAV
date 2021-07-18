@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
     const { 'AV--token': token } = parseCookies()
 
       if(token) {
-        fetch('http://10.0.1.10:3000/api/auth-services/user', {
+        fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/user`, {
           method: 'GET',
           headers: { 
             'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
   async function signIn({email, password}, redirect = true) {
 
     try {
-      const req = await fetch('http://10.0.1.10:3000/api/auth-services/auth', {
+      const req = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/auth`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

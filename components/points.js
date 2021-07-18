@@ -17,7 +17,7 @@ export default function Points(props) {
 
     const { 'AV--token': token } = parseCookies()
       
-    const data = await fetch(`http://10.0.1.10:3000/api/routes-services/all-points?routeName=${router.query.routeName}`, {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/all-points?routeName=${router.query.routeName}`, {
       method: 'GET',
       headers: { 
         'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default function Points(props) {
     let deleteButton = e.currentTarget
     const { 'AV--token': token } = parseCookies()
     
-    const data = await fetch(`http://10.0.1.10:3000/api/routes-services/delete-point?routeName=${router.query.routeName}`, {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/delete-point?routeName=${router.query.routeName}`, {
       method: 'DELETE',
       headers: { 
         'Content-Type': 'application/json',

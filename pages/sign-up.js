@@ -36,7 +36,7 @@ export default function SignUp() {
   async function submitSignIn(e) {
     e.preventDefault()
   
-    const req = await fetch('http://10.0.1.10:3000/api/auth-services/register', {
+    const req = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(inputs)
@@ -55,7 +55,7 @@ export default function SignUp() {
     let validate = emailTextValidate(input.value)
   
     if(validate) {
-      const req = await fetch('http://10.0.1.10:3000/api/auth-services/email-availability', {
+      const req = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/email-availability`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -127,7 +127,7 @@ export default function SignUp() {
 
       <div className="login--container">
           <Link href="/">
-            <div className="login--logo"> <Image src={logo} alt="logo" /> </div>
+            <a className="login--logo"> <Image src={logo} alt="logo" /> </a>
           </Link>
           <form className="login--form" onSubmit={submitSignIn}>
             <h2>Criar nova conta</h2>

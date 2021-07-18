@@ -22,15 +22,15 @@ export default function HeaderComponent() {
             <a name="header--top"></a>
             <div className="header--presentation">
                 <Link href="/">
-                    <div className="header--logo">
+                    <a className="header--logo">
                         <Image src={logo} alt="logo"/>
-                    </div>
+                    </a>
                 </Link>
 
                 <div className="header--login">
                     {!user? (
                     <Link href="/login">
-                        <div className="header--loginText">{accountText}</div>
+                        <a className="header--loginText">{accountText}</a>
                     </Link>) : (
                         <button 
                             className="header--userText"

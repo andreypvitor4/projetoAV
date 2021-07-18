@@ -61,7 +61,7 @@ export default function NewPointForm(props) {
     const { 'AV--token': token } = parseCookies()
     
     if(props.submitFormOption === 'add') {
-      const data = await fetch(`http://10.0.1.10:3000/api/routes-services/add-point?routeName=${router.query.routeName}`, {
+      const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/add-point?routeName=${router.query.routeName}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function NewPointForm(props) {
       }
     }
     if(props.submitFormOption === 'update') {
-      const data = await fetch(`http://10.0.1.10:3000/api/routes-services/update-point?routeName=${router.query.routeName}`, {
+      const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/update-point?routeName=${router.query.routeName}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',

@@ -35,7 +35,7 @@ export default function ManageRoutes() {
 
     const { 'AV--token': token } = parseCookies()
 
-    const data = await fetch('http://10.0.1.10:3000/api/routes-services/new-route', {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/new-route`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

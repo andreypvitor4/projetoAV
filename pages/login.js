@@ -42,7 +42,7 @@ export default function Login() {
       <div className="login--container">
           <div>
             <Link href="/">
-              <div className="login--logo"> <Image src={logo} alt="logo" /> </div>
+              <a className="login--logo"> <Image src={logo} alt="logo" /> </a>
             </Link>
           </div>
           <form className="login--form" onSubmit={submitLogin}>

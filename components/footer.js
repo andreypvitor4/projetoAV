@@ -19,16 +19,16 @@ export default function FooterComponent() {
             <div className="footer--iconsContainer">
                 <div id="icons" className="footer--divIcons">
                     <Link href="/">
-                        <div  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faInstagram} /> </div>
+                        <a  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faInstagram} /> </a>
                     </Link>
                     <Link href="/">
-                        <div  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faFacebookSquare} /> </div>
+                        <a  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faFacebookSquare} /> </a>
                     </Link>
                     <Link href="/">
-                        <div  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faYoutube} /> </div>
+                        <a  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faYoutube} /> </a>
                     </Link>
                     <Link href="/">
-                        <div  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faTiktok} /> </div>
+                        <a  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faTiktok} /> </a>
                     </Link>
                 </div>
             </div>

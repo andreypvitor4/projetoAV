@@ -42,7 +42,7 @@ export default function CreateRoute() {
   async function handleConcludeRoute() {
     const { 'AV--token': token } = parseCookies()
       
-    const data = await fetch(`http://10.0.1.10:3000/api/routes-services/set-route-status?routeName=${router.query.routeName}`, {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/set-route-status?routeName=${router.query.routeName}`, {
       method: 'PUT',
       headers: { 
         'Content-Type': 'application/json',

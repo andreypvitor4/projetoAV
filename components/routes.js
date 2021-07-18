@@ -12,7 +12,7 @@ export default function Routes(props) {
   const getAllRoutes = useCallback(async function() {
     const { 'AV--token': token } = parseCookies()
       
-    const data = await fetch('http://10.0.1.10:3000/api/routes-services/all-routes', {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/all-routes`, {
       method: 'GET',
       headers: { 
         'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ async function handleDeleteRoute(e) {
 
   const { 'AV--token': token } = parseCookies()
 
-  const data = await fetch('http://10.0.1.10:3000/api/routes-services/delete-route', {
+  const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/delete-route`, {
     method: 'DELETE',
     headers: { 
       'Content-Type': 'application/json',

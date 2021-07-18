@@ -1,7 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from '../contexts/authContext'
 import { parseCookies } from 'nookies'
+import Router from 'next/router'
 
 export default function Adm() {
+  const { user } = useContext(AuthContext)
+  useEffect(() => {
+    if(user.permission != 'ADM') {
+      Router.push('/')
+    }
+  }, []);
+
   const [input, setInput] = useState('');
   const [searchedUsers, setSearchedUsers] = useState([]);
 
@@ -17,7 +26,7 @@ export default function Adm() {
 
     const { 'AV--token': token } = parseCookies()
 
-    const data = await fetch(`http://10.0.1.10:3000/api/adm-services/find-user?key=${choosenQuery}&value=${input}`, {
+    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/adm-services/find-user?key=${choosenQuery}&value=${input}`, {
       method: 'GET',
       headers: { 
         'Content-Type': 'application/json',

@@ -6,6 +6,10 @@ async function FindUser(req, res) {
   await cors(req, res)
   await authMiddleware(req, res)
 
+  if(req.userPermission !== 'ADM') {
+    return res.status(401).json({error: 'Você não está autorizado'})
+  }
+
   if(req.method === 'GET') {
     const { key, value } = req.query
     const { db, client } = await connect()
