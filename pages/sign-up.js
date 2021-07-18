@@ -3,6 +3,8 @@ import Link from "next/link"
 import { useState, useContext, useRef } from 'react'
 import { AuthContext } from '../contexts/authContext'
 import Router from 'next/router'
+import Image from 'next/image'
+import logo from '../public/logoAV.png'
 
 export default function SignUp() {
   const [signUpError, setSignUpError] = useState(false);
@@ -125,7 +127,7 @@ export default function SignUp() {
 
       <div className="login--container">
           <Link href="/">
-            <a className="login--logo"> <img src="logoAV.png" alt="logo" /> </a>
+            <div className="login--logo"> <Image src={logo} alt="logo" /> </div>
           </Link>
           <form className="login--form" onSubmit={submitSignIn}>
             <h2>Criar nova conta</h2>

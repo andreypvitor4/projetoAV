@@ -14,9 +14,9 @@ export default function Home() {
 
     <nav className="home--container">
       <Link href="/manage-routes">
-        <a className="home--createRoute">
+        <div className="home--createRoute">
           <p>Minhas rotas</p>
-        </a>
+        </div>
       </Link>
       <a className="home--useRoute" href="#footer--contact">
         <p>Contatos</p>

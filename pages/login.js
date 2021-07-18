@@ -2,6 +2,8 @@ import Head from 'next/head'
 import Link from "next/link"
 import { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/authContext'
+import Image from 'next/image'
+import logo from '../public/logoAV.png'
 
 export default function Login() {
   const { signIn, loginError } = useContext(AuthContext)
@@ -40,7 +42,7 @@ export default function Login() {
       <div className="login--container">
           <div>
             <Link href="/">
-              <a className="login--logo"> <img src="logoAV.png" alt="logo" /> </a>
+              <div className="login--logo"> <Image src={logo} alt="logo" /> </div>
             </Link>
           </div>
           <form className="login--form" onSubmit={submitLogin}>

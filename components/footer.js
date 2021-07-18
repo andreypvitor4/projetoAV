@@ -5,6 +5,7 @@ import { faYoutube } from '@fortawesome/free-brands-svg-icons'
 import { faTiktok } from '@fortawesome/free-brands-svg-icons'
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import Link from 'next/link'
 
 export default function FooterComponent() {
     return(
@@ -17,10 +18,18 @@ export default function FooterComponent() {
 
             <div className="footer--iconsContainer">
                 <div id="icons" className="footer--divIcons">
-                    <a href="/" className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faInstagram} /> </a>
-                    <a href="/" className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faFacebookSquare} /> </a>
-                    <a href="/" className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faYoutube} /> </a>
-                    <a href="/" className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faTiktok} /> </a>
+                    <Link href="/">
+                        <div  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faInstagram} /> </div>
+                    </Link>
+                    <Link href="/">
+                        <div  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faFacebookSquare} /> </div>
+                    </Link>
+                    <Link href="/">
+                        <div  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faYoutube} /> </div>
+                    </Link>
+                    <Link href="/">
+                        <div  className='footer--icon'> <FontAwesomeIcon className="footer--iconImage" icon={faTiktok} /> </div>
+                    </Link>
                 </div>
             </div>
 

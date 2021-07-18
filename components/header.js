@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { useContext, useState } from 'react'
 import { AuthContext } from '../contexts/authContext'
 import Account from './account'
+import Image from 'next/image'
+import logo from '../public/logoAV.png'
 
 
 export default function HeaderComponent() {
@@ -20,15 +22,15 @@ export default function HeaderComponent() {
             <a name="header--top"></a>
             <div className="header--presentation">
                 <Link href="/">
-                    <a className="header--logo">
-                        <img src="/logoAV.png" alt="logo" />
-                    </a>
+                    <div className="header--logo">
+                        <Image src={logo} alt="logo"/>
+                    </div>
                 </Link>
 
                 <div className="header--login">
                     {!user? (
                     <Link href="/login">
-                        <a className="header--loginText">{accountText}</a>
+                        <div className="header--loginText">{accountText}</div>
                     </Link>) : (
                         <button 
                             className="header--userText"
