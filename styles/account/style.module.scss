@@ -1,0 +1,109 @@
+@import '../variables';
+
+.shadowBackground {
+  visibility: hidden;
+  overflow: hidden;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+  background-color: black;
+  transition: all ease 0.5s;
+  opacity: 0%;
+}
+.user {
+  visibility: hidden;
+  overflow: hidden;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  height: 100vh;
+  display: flex;
+  z-index: 10;
+  transition: all ease 0.5s;
+  width: 0%;
+}
+.shadow {
+  flex: 2;
+  display: flex;
+  justify-content: flex-end;
+  div {
+    color: #333;
+    background-color: #eee;
+    box-shadow: -5px 0px 15px rgb(30, 111, 243);
+    height: 35px;
+    width: 40px;
+    z-index: 11;
+    margin-top: 18px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    text-align: center;
+    line-height: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    span {
+      display: block;
+      position: absolute;
+      overflow: hidden;
+      top: 18px;
+      height: 35px;
+      width: 30px;
+      margin-left: 30px;
+      z-index: 12;
+      background-color: #eee;
+    }
+  }
+}
+.userMenu {
+  flex: 1.5;
+  background-color: #eee;
+  box-shadow: -5px 0px 20px rgb(30, 111, 243);
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  h1 {
+    margin: 10px;
+    border-bottom: solid 3px $primaryColor;
+  }
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin: 10px;
+    p {
+      margin-top: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    button {
+      display: block;
+      background-color: $primaryColor;
+      color: white;
+      margin-top: 20px;
+      margin-left: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+  @media(max-width: 700px) {
+    flex: 6;
+  }
+}
+
+.user.userMenuActive {
+  visibility: visible;
+  width: 100%;
+}
+.shadowBackground.userMenuActive {
+  visibility: visible ;
+  opacity: 60%;
+}

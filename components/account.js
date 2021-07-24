@@ -1,7 +1,7 @@
-import { useContext, useRef} from 'react'
+import { useContext, useRef } from 'react'
 import { AuthContext } from '../contexts/authContext'
 import { destroyCookie } from 'nookies'
-
+import style from '../styles/account/style.module.css'
 
 export default function Account(props) {
   const { user, setUser, rCount } = useContext(AuthContext)
@@ -17,11 +17,11 @@ export default function Account(props) {
 
   return (
     <>
-      <div className={`header--shadowBackground ${props.userMenuActiveClass}`}></div>
+      <div className={`${style.shadowBackground} ${style[props.userMenuActiveClass]}`}></div>
 
-      <div className={`header--user ${props.userMenuActiveClass}`} id="header__userMenu">
+      <div className={`${style.user} ${style[props.userMenuActiveClass]}`}>
         <div 
-          className="header--shadow" 
+          className={style.shadow}
           ref={headerShadowRef} 
           onClick={props.clickUserMenu}
         >
@@ -30,7 +30,7 @@ export default function Account(props) {
           </div>
         </div>
 
-        <div className="header--userMenu">
+        <div className={style.userMenu}>
           <h1>Usuário</h1>
           
           <div>

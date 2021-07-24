@@ -1,10 +1,13 @@
-import { useState, useRef } from 'react';
-import { parseCookies } from 'nookies'
+import { useState, useRef, useContext } from 'react';
 import Head from 'next/head'
 import Routes from '../components/routes';
+import { functionsContext } from '../contexts/globalFunctions'
+import styles from '../styles/manageRoutes/style.module.css'
 
 export default function ManageRoutes() {
   const cancelButtonRef = useRef(null)
+  const {fetchApiData, updateInputs, handleMaxChar } = useContext(functionsContext)
+
   const [authError, setAuthError] = useState(false);
   const [activeClass, setActiveClass] = useState('');
   const [allRoutes, setAllRoutes] = useState([]);
@@ -15,51 +18,23 @@ export default function ManageRoutes() {
     points: [],
   });
 
-  function updateInputs(newInputs) {
-    setInputs(prevState => {
-      return (
-        {
-        ...prevState,
-        ...newInputs
-        }
-      )
-    })
-  }
-
   function handleSetInputs(e) {
-    updateInputs({[e.target.name]: e.target.value})
+    updateInputs({[e.target.name]: e.target.value}, setInputs)
   }
 
   async function handleSubmitForm(e) {
     e.preventDefault()
 
-    const { 'AV--token': token } = parseCookies()
+    const {data: route, status } = await fetchApiData('/api/routes-services/new-route', 'POST', inputs)
 
-    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/new-route`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(inputs),
-      })
-
-    if(data.status === 200) {
+    if(status === 200) {
       cancelButtonRef.current.click()
-      const route = await data.json()
       setAllRoutes(prev => ([...prev, route]))
-      updateInputs({routeName: '', routeDescription: ''})
+      updateInputs({routeName: '', routeDescription: ''}, setInputs)
     }
-    if(data.status === 401) {
+    if(status === 401) {
       cancelButtonRef.current.click()
       setAuthError(true)
-    }
-  }
-
-  function handleMaxChar(e, max) {
-    let maxChar = e.currentTarget.value
-    if(e.currentTarget.value.length > max) {
-      e.currentTarget.value = maxChar.slice(0,max)
     }
   }
 
@@ -70,36 +45,38 @@ export default function ManageRoutes() {
         <title>Minhas rotas</title>
       </Head>
 
-      <main className="mr--container">
-        <div className="mr--routes">
+      <main className={styles.container}>
+        <div className={styles.routes}>
           <h2 style={{marginLeft: '2.5%'}}>Minhas rotas</h2>
         </div>
 
         <Routes allRoutes={allRoutes} setAllRoutes={setAllRoutes}/>
 
+        <p className={styles.mobileText}>Arraste para a direita para editar ou para a esquerda para deletar</p>
+
         {authError && (
-          <div className="mr--authError">
+          <div className={styles.authError}>
             <p>Você não tem autorização para fazer esta ação, entre em contato para adquirir.</p>
           </div>
         )}
 
-        <div className="mr--divAddButton">
+        <div className={styles.divAddButton}>
           <button 
-          className="mr--addButton"
-          onClick={() => { setActiveClass('mr--activeForm') }}
+          className={styles.addButton}
+          onClick={() => { setActiveClass('activeForm') }}
           >
             +
           </button>
         </div>
       </main>
 
-      <div className={`mr--formContainer ${activeClass}`}>
-        <div className="mr--formShadow"></div>
+      <div className={`${styles.formContainer} ${styles[activeClass]}`}>
+        <div className={styles.formShadow}></div>
 
-        <form className="mr--form" onSubmit={handleSubmitForm}>
+        <form className={styles.form} onSubmit={handleSubmitForm}>
           <h2>Digite o nome da nova rota</h2>
 
-          <div className="mr--inputDiv">
+          <div className={styles.inputDiv}>
             <label htmlFor="npf--name">nome</label>
             <input 
               type="text" 
@@ -110,7 +87,7 @@ export default function ManageRoutes() {
             />
           </div>
 
-          <div className="mr--inputDiv">
+          <div className={styles.inputDiv}>
             <label htmlFor="npf--description">descrição</label>
             <input 
               type="text" 

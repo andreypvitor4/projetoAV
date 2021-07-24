@@ -56,3 +56,12 @@ td {
   font-weight: bold;
   text-align: center;
 }
+
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  tr {
+    transition: all ease 0.1s;
+  }
+}

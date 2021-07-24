@@ -9,10 +9,10 @@ async function auth(req, res) {
   if(req.method === 'POST') {
     const { email, password } = req.body
     const { db, client } = await connect()
-
+    
     try {
       const user = await db.collection('users').findOne({ email })
-      await client.close()
+
       if(!user) {
         return res.status(400).json({error: 'Usuário não existe'})
       }
@@ -33,6 +33,8 @@ async function auth(req, res) {
 
     } catch (error) {
       return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+    }finally {
+      await client.close()
     }
     
   }else{

@@ -1,33 +1,28 @@
-import { useState, useEffect, useCallback } from "react"
-import { parseCookies } from 'nookies'
+import { useState, useEffect, useContext } from "react"
 import Router from 'next/router'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { functionsContext } from '../contexts/globalFunctions'
+import FadeInWindow from '../components/fadeInWindow';
+import styles from '../styles/routes/style.module.css'
 
 export default function Routes(props) {
+  const { fetchApiData } = useContext(functionsContext)
+
   const [touchStart, setTouchStart] = useState(0);
   const [touchPosition, setTouchPosition] = useState(0);
   const [routeToDelete, setRouteToDelete] = useState('');
+  const [deleteRouteId, setDeleteRouteId] = useState('');
+  const [fadeInWindowActive, setFadeInWindowActive] = useState('');
 
-  const [deleteActiveClass, setDeleteActiveClass] = useState('');
-
-  const getAllRoutes = useCallback(async function() {
-    const { 'AV--token': token } = parseCookies()
-      
-    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/all-routes`, {
-      method: 'GET',
-      headers: { 
-        'Content-Type': 'application/json',
-        'authorization': `Bearer ${token}`,
-      },
+  useEffect(() => {
+    fetchApiData('/api/routes-services/all-routes')
+    .then(({ data: routes, status }) => {
+      if(status === 200) {
+        props.setAllRoutes(routes)
+      }
     })
-    const routes = await data.json()
-    if(data.status === 200) {
-      props.setAllRoutes(routes)
-    }
-}, [])
-
-useEffect(() => {
-  getAllRoutes()
-}, [getAllRoutes]);
+  }, [])
 
 function handleTouchStart(e) {
   setTouchStart(e.changedTouches[0].clientX)
@@ -43,22 +38,34 @@ function handleTouchMove(e) {
     div.style.marginLeft = `${touchPosition*1.5}px`
   
     let opacity = Math.abs(touchPosition/600)
+
+    if(touchPosition < 0) {
+      div.firstChild.style.background = 'red'
+    }
+    if(touchPosition > 0) {
+      div.firstChild.style.background = 'blue'
+    }
   
     div.firstChild.style.display = 'block'
     div.firstChild.style.opacity = `${opacity}`
   }
 }
 
-function handleTouchEnd(routeName) {
+function handleTouchEnd(routeId, routeName) {
   return e => {
     const div = e.currentTarget
     div.style.marginLeft = `0px`
   
     div.firstChild.style.display = 'none'
     div.firstChild.style.opacity = '0'
-  
-    if(Math.abs(touchPosition) > 200) {
-      setDeleteActiveClass('routes--deleteActiveClass')
+    console.log(touchPosition)
+
+    if(touchPosition > 210) {
+      Router.push(`/create-route/${routeId}`)
+    }
+    if(touchPosition < -200) {
+      setFadeInWindowActive(true)
+      setDeleteRouteId(routeId)
       setRouteToDelete(routeName)
     }
   }
@@ -67,43 +74,42 @@ function handleTouchEnd(routeName) {
 async function handleDeleteRoute(e) {
   let deleteButton = e.currentTarget
 
-  const { 'AV--token': token } = parseCookies()
+  const { status } = await fetchApiData('/api/routes-services/delete-route', 'DELETE', {routeId: deleteRouteId})
 
-  const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/delete-route`, {
-    method: 'DELETE',
-    headers: { 
-      'Content-Type': 'application/json',
-      'authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify({routeName: routeToDelete})
-  })
-
-  if(data.status === 200) {
+  if(status === 200) {
     deleteButton.nextSibling.click()
-      props.setAllRoutes(allRoutes => (
-        allRoutes.filter((elem) => {
-          return elem.routeName !== routeToDelete
-        })
-      ))
+
+    props.setAllRoutes(allRoutes => (
+      allRoutes.filter((elem) => {
+        return elem._id !== deleteRouteId
+      })
+    ))
     }
   }
 
-  function handleRedirectRoute({routeName, routeStatus}) {
+  function handleRedirectRoute({ _id, routeStatus }) {
     return () => {
+
       const routeRedirect = routeStatus == 'inacabada'?
         'create-route':
         'use-route'
-        Router.push(`/${routeRedirect}/${routeName}`)
+        Router.push(`/${routeRedirect}/${_id}`)
     }
   }
 
-  function handlePcDeleteEnter(e) {
+  function handlePcOptionsEnter(e) {
     e.currentTarget.firstChild.style.visibility = 'visible'
     e.currentTarget.firstChild.style.opacity = '100%'
+
+    e.currentTarget.lastChild.style.visibility = 'visible'
+    e.currentTarget.lastChild.style.opacity = '100%'
   }
-  function handlePcDeleteLeave(e) {
+  function handlePcOptionsLeave(e) {
     e.currentTarget.firstChild.style.visibility = 'hidden'
     e.currentTarget.firstChild.style.opacity = '0%'
+
+    e.currentTarget.lastChild.style.visibility = 'hidden'
+    e.currentTarget.lastChild.style.opacity = '0%'
   }
 
   return (
@@ -111,54 +117,78 @@ async function handleDeleteRoute(e) {
 
       {props.allRoutes.length > 0 && (
         props.allRoutes.map( (elem, key) => (
-          <div key={key} className="routes--container" 
-            onMouseEnter={handlePcDeleteEnter}
-            onMouseLeave={handlePcDeleteLeave}
+          <div key={key} className={styles.container}
+            onMouseEnter={handlePcOptionsEnter}
+            onMouseLeave={handlePcOptionsLeave}
           >
-            <div className="routes--pcDeleteArea">
-              <span className="routes--pcDelete" onClick={() => {
-                setDeleteActiveClass('routes--deleteActiveClass')
+            <div className={styles.pcDeleteArea}>
+              <span className={styles.pcDelete} onClick={() => {
+                setFadeInWindowActive(true)
                 setRouteToDelete(elem.routeName)
+                setDeleteRouteId(elem._id)
               }}>X</span>
             </div>
 
             <div 
-              className="routes--route" 
+              className={styles.route}
               onClick={handleRedirectRoute(elem)}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd(elem.routeName)}
+              onTouchEnd={handleTouchEnd(elem._id, elem.routeName)}
             >
-              <span className="routes--routeShadow"></span>
 
-              <div className="routes--routeName">
+              {touchPosition < 0 ? 
+                <span 
+                  className={styles.routeShadow} 
+                  style={{color: 'white', lineHeight: '100px', fontSize: '50px', textAlign: 'center'}}
+                  >
+                  X
+                </span>:
+                <span 
+                  className={styles.routeShadow}
+                  style={{color: 'white', lineHeight: '130px', textAlign: 'center'}}
+                  >
+                  <FontAwesomeIcon icon={faEdit} style={{
+                    width: '50px'
+                  }}/>
+                </span>
+              }
+
+              <div className={styles.routeName}>
                 <p>{elem.routeName}</p>
                 <p>{(new Date(elem.date)).toLocaleDateString()}</p>
               </div>
-              <div className="routes--routeDescription">
+              <div className={styles.routeDescription}>
                 <p>Descrição: {elem.routeDescription}</p>
     
-                <p className="routes--status">
+                <p className={styles.status}>
                   {elem.routeStatus == 'pronta'?
-                    <span style={{color: 'green'}}>Clique para usar, arraste para o lado para deletar.</span>:
-                    <span style={{color: 'blue'}}>Clique para editar, arraste para o lado para deletar.</span>}
+                    <span style={{color: 'green'}}>Clique para usar</span>:
+                    <span style={{color: 'blue'}}>Clique para editar</span>}
                 </p>
               </div>
+            </div>
+
+            <div className={styles.pcEditArea}>
+              <span className={styles.pcEdit} onClick={() => {
+                Router.push(`/create-route/${elem._id}`)
+              }}>
+                <FontAwesomeIcon icon={faEdit} style={{
+                  width: '20px'
+                }}/>
+              </span>
             </div>
           </div>
         ))
       )}
 
-    <div className={`routes--areYouSureScreen ${deleteActiveClass}`}>
-        <div className="routes--areYouSure">
-          <p>Tem certeza que deseja excluir a rota {routeToDelete}?</p>
-          
-          <div>
-            <button onClick={handleDeleteRoute}>Continuar</button>
-            <button onClick={() => {setDeleteActiveClass('')}}>Cancelar</button>
-          </div>
-        </div>
-      </div>
+    <FadeInWindow 
+      active={fadeInWindowActive} 
+      setActive={setFadeInWindowActive} 
+      action={handleDeleteRoute}
+    >
+      <p>Tem certeza que deseja excluir a rota {routeToDelete}?</p>
+    </FadeInWindow>
 
     </div>
   )

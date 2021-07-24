@@ -1,0 +1,125 @@
+.footer {
+  width: 100%;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  background: #333;
+  overflow: hidden;
+}
+
+.goToTop {
+  height: 50px;
+  width: 100%;
+  background: #0c60e9ff;
+}
+
+.goToTopLink {
+  display: block;
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #e7e7e7;
+  font-weight: bold;
+}
+
+.iconsContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.divIcons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  max-width: 600px;
+  overflow: hidden;
+}
+
+.icon {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  margin: 20px;
+  height: 40px;
+  width: 40px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #e7e7e7;
+}
+
+.iconImage {
+  width: 60%;
+}
+
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.contact {
+  color: #e7e7e780;
+}
+
+.contact h2 {
+  color: #e7e7e7;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.contact h2::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0px;
+  width: 50px;
+  height: 2px;
+  background: #0c60e9ff;
+}
+
+.info {
+  color: #e7e7e780;
+}
+
+.info h2 {
+  color: #e7e7e7;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.info h2::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0px;
+  width: 50px;
+  height: 2px;
+  background: #0c60e9ff;
+}
+/*# sourceMappingURL=style.module.css.map */

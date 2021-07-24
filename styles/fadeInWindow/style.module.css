@@ -1,0 +1,95 @@
+.areYouSureScreen {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.452);
+  -webkit-transition: all ease 0.3s;
+  transition: all ease 0.3s;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.areYouSure {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 40%;
+  margin: auto;
+  padding: 20px;
+  border: 4px solid #333;
+  border-radius: 6px;
+  background-color: #e7e7e7;
+  font-weight: bold;
+}
+
+@media (max-width: 700px) {
+  .areYouSure {
+    width: 95%;
+  }
+}
+
+.areYouSure th {
+  padding: 10px;
+  background-color: #0c60e9ff;
+}
+
+.areYouSure table {
+  margin-bottom: 30px;
+}
+
+.areYouSure button {
+  cursor: pointer;
+}
+
+.areYouSure div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.areYouSure div button:last-child {
+  background-color: #333;
+}
+
+.areYouSureScreen.deleteActiveClass {
+  visibility: visible;
+  opacity: 100;
+}
+
+.areYouSureChildren {
+  width: 100%;
+  height: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+/*# sourceMappingURL=style.module.css.map */

@@ -3,7 +3,7 @@ import cors from '../../../middlewares/cors'
 import connect from '../../../utils/database'
 import { ObjectId } from "mongodb";
 
-export default async function savePoint(req, res) {
+export default async function newRoute(req, res) {
   await cors(req, res)
   await authMiddleware(req, res)
 
@@ -19,7 +19,6 @@ export default async function savePoint(req, res) {
     try {
       const createResponse = await db.collection(`${req.userNameInDb}${req.userId}`)
       .insertOne(data)
-      await client.close()
 
       if(!!createResponse.ops[0]) {
         return res.status(200).json(createResponse.ops[0])
@@ -28,8 +27,9 @@ export default async function savePoint(req, res) {
       }
 
     } catch (error) {
-      console.log(error)
       return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+    }finally {
+      await client.close()
     }
 
   }else {

@@ -4,6 +4,7 @@ import { AuthContext } from '../contexts/authContext'
 import Account from './account'
 import Image from 'next/image'
 import logo from '../public/logoAV.png'
+import styles from '../styles/header/style.module.css'
 
 
 export default function HeaderComponent() {
@@ -20,20 +21,20 @@ export default function HeaderComponent() {
     return (
         <header>
             <a name="header--top"></a>
-            <div className="header--presentation">
+            <div className={styles.presentation}>
                 <Link href="/">
-                    <a className="header--logo">
+                    <a className={styles.logo}>
                         <Image src={logo} alt="logo"/>
                     </a>
                 </Link>
 
-                <div className="header--login">
+                <div className={styles.login}>
                     {!user? (
                     <Link href="/login">
-                        <a className="header--loginText">{accountText}</a>
+                        <a className={styles.loginText}>{accountText}</a>
                     </Link>) : (
                         <button 
-                            className="header--userText"
+                            className={styles.userText}
                             onClick={clickUserMenu}>
                                 {accountText}
                         </button>

@@ -1,0 +1,87 @@
+@import '../variables';
+
+.footer {
+  width: 100%;
+  height: fit-content;
+  background: #333;
+  overflow: hidden;
+}
+.goToTop{
+  height: 50px;
+  width: 100%;
+  background: $primaryColor;
+}
+.goToTopLink {
+  display: block;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e7e7e7;
+  font-weight: bold;
+}
+.iconsContainer{
+  display: flex;
+  justify-content: center;
+}
+.divIcons {
+  display: flex;
+  justify-content: space-between;
+  max-width: 600px;
+  overflow: hidden;
+}
+.icon {
+  display: inline-flex;
+  margin: 20px;
+  height: 40px;
+  width: 40px;
+  justify-content: center;
+  align-items: center;
+  color: #e7e7e7;
+}
+.iconImage {
+  width: 60%;
+}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.contact {
+  color: #e7e7e780;
+  h2 {
+    color: #e7e7e7;
+    position: relative;
+    margin-bottom: 20px;
+  }
+  h2::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0px;
+    width: 50px;
+    height: 2px;
+    background: $primaryColor;
+  }
+}
+
+.info {
+  color: #e7e7e780;
+  h2 {
+    color: #e7e7e7;
+    position: relative;
+    margin-bottom: 20px;
+  }
+  h2::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0px;
+    width: 50px;
+    height: 2px;
+    background: $primaryColor;
+  }
+}

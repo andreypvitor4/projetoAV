@@ -34,16 +34,16 @@ export default async function nextcheckpoint(req, res) {
     ))
     let fullUrlDestinations = urlDestinationsArray.join('%7C')
 
+    const {db, client} = await connect()
+
     try {
-      const {db, client} = await connect()
       const user = await db.collection('users').findOne({_id: ObjectId(req.userId) })
 
       if(user.rCount <= 0) {
-        await client.close()
         return res.status(401).json({error: 'Você excedeu o seu limite de requisições'})
       }
 
-      let response = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${startPoint}&destinations=${fullUrlDestinations}&key=AIzaSyCMtBLzQIDJrh2Z5fGejZax4YFFPmHcab0`)
+      let response = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${startPoint}&destinations=${fullUrlDestinations}&key=${process.env.GOOGLE_SECRET}`)
 
       if(response.data.status == 'OK') {
         const dbResponse = await db.collection("users")
@@ -52,7 +52,10 @@ export default async function nextcheckpoint(req, res) {
             rCount: -1
           }
         })
-        await client.close()
+
+        if(dbResponse.result.ok != 1) {
+          return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+        }
     
         let distances = response.data.rows[0].elements.map( elem => elem.distance.value)
         let shortestDistance = Math.min(...distances)
@@ -62,11 +65,14 @@ export default async function nextcheckpoint(req, res) {
     
         return res.status(200).json(nearestPoint)
       }
-      await client.close()
 
     } catch (error) {
-      console.log(error)
       return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+    }finally {
+      await client.close()
     }
+
+  }else {
+    res.status(400).json({error: 'Método de request incorreto'})
   }
 }

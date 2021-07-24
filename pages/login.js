@@ -2,10 +2,13 @@ import Head from 'next/head'
 import Link from "next/link"
 import { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/authContext'
+import { functionsContext } from '../contexts/globalFunctions'
 import Image from 'next/image'
 import logo from '../public/logoAV.png'
+import styles from '../styles/login/style.module.css'
 
 export default function Login() {
+  const { updateInputs } = useContext(functionsContext)
   const { signIn, loginError } = useContext(AuthContext)
   const [inputs, setInputs] = useState({
     email: '',
@@ -18,36 +21,25 @@ export default function Login() {
       signIn(inputs)
   }
 
-  function updateInputs(newInputs) {
-    setInputs(prevState => {
-      return (
-        {
-        ...prevState,
-        ...newInputs
-        }
-      )
-    })
-  }
-
   function handleSetInputs(e) {
-    updateInputs({[e.target.name]: e.target.value})
+    updateInputs({[e.target.name]: e.target.value}, setInputs)
   }
 
   return(
-    <div className="login">
+    <div className={styles.login}>
       <Head>
         <title>Login</title>
       </Head>
 
-      <div className="login--container">
+      <div className={styles.container}>
           <div>
             <Link href="/">
-              <a className="login--logo"> <Image src={logo} alt="logo" /> </a>
+              <a className={styles.logo}> <Image src={logo} alt="logo" /> </a>
             </Link>
           </div>
-          <form className="login--form" onSubmit={submitLogin}>
+          <form className={styles.form} onSubmit={submitLogin}>
             <h2>Login</h2>
-            <div className="login--user">
+            <div className={styles.user}>
               <label htmlFor="login__user">Email</label>
               <input 
                 type="email" 
@@ -58,7 +50,7 @@ export default function Login() {
                 onChange={handleSetInputs}
               />
             </div>
-            <div className="login--password">
+            <div className={styles.password}>
               <label htmlFor="login__password">Senha</label>
               <input 
                 type="password" 
@@ -68,18 +60,18 @@ export default function Login() {
                 onChange={handleSetInputs}
               />
             </div>
-            <div className="login--continue">
-              <input className="login--button" type="submit" value="Continuar"/>
+            <div className={styles.continue}>
+              <input className={styles.button} type="submit" value="Continuar"/>
             </div>
-            <div className="login--createAccount">
+            <div className={styles.createAccount}>
               <Link href="/sign-up">
-                <a className="login--button">Criar conta</a>
+                <a className={styles.button}>Criar conta</a>
               </Link>
             </div>
           </form>
           
           {loginError && (
-          <p className="login--error">
+          <p className={styles.error}>
             {loginError.error}
           </p>)}
       </div>

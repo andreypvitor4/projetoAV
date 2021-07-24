@@ -47,4 +47,9 @@
 .adm--searchedUsers table {
   width: 95%;
 }
+
+.adm--userForm {
+  width: 100%;
+  height: 60%;
+}
 /*# sourceMappingURL=style.css.map */

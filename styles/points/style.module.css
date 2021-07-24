@@ -1,0 +1,83 @@
+.points {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+}
+
+.points tr {
+  -webkit-transition: all ease 0.1s;
+  transition: all ease 0.1s;
+}
+
+.pointOptionsScreen {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  visibility: hidden;
+}
+
+.pointOptions {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100vw;
+  background-color: #333;
+  left: 0px;
+  -webkit-transition: all ease 0.5s;
+  transition: all ease 0.5s;
+  bottom: -100px;
+}
+
+.pointOptions button {
+  margin: 15px;
+  width: 100px;
+  cursor: pointer;
+}
+
+.pointOptions button:first-child {
+  background-color: #0c60e9ff;
+}
+
+.pointOptions button:last-child {
+  background-color: #dd2a12;
+}
+
+.pointOptionsShadow {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  -webkit-transition: all ease 0.5s;
+  transition: all ease 0.5s;
+  opacity: 0%;
+}
+
+.pointOptionsScreen.activeOptions {
+  visibility: visible;
+}
+
+.pointOptionsScreen.activeOptions .pointOptionsShadow {
+  opacity: 40%;
+}
+
+.pointOptionsScreen.activeOptions .pointOptions {
+  bottom: 0px;
+}
+/*# sourceMappingURL=style.module.css.map */

@@ -1,66 +1,45 @@
-import { parseCookies } from 'nookies'
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router'
+import { functionsContext } from '../contexts/globalFunctions'
+import FadeInWindow from '../components/fadeInWindow'
+import styles from '../styles/points/style.module.css'
 
 export default function Points(props) {
-  const [deleteActiveClass, setDeleteActiveClass] = useState('');
+  const { fetchApiData, normalizeString: rs } = useContext(functionsContext)
+  const [fadeInWindowActive, setFadeInWindowActive] = useState(false);
 
   const router = useRouter()
 
-  function rs(string) {
-    let normalizedString = string.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-    return normalizedString.toLowerCase()
-  }
+  useEffect(() => {
+    if(!!router.query.routeId) {
 
-  const getAllPoints = useCallback(async function() {
-    if(!router.query.routeName) return
+      fetchApiData(`/api/routes-services/all-points?routeId=${router.query.routeId}`, 'GET').then(({status, data: points}) => {
 
-    const { 'AV--token': token } = parseCookies()
-      
-    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/all-points?routeName=${router.query.routeName}`, {
-      method: 'GET',
-      headers: { 
-        'Content-Type': 'application/json',
-        'authorization': `Bearer ${token}`,
-      },
-    })
-    const points = await data.json()
-    props.setAllPoints(points)
-
-    const cities = points.map(elem => rs(elem.cidade)).filter( (elem, key, cities) => (
-      key === cities.indexOf(elem)
-    ))
-
-    props.setAllCities(cities)
-
+        if(status == 200) {
+          props.setAllPoints(points)
+          const cities = points.map(elem => rs(elem.cidade))
+          .filter( (elem, key, cities) => (
+            key === cities.indexOf(elem)
+          ))
+          props.setAllCities(cities)
+        }else {
+          props.setAllPoints([])
+          props.setAllCities([])
+        }
+      })
+    }
   }, [router])
 
-  useEffect(() => {
-    getAllPoints()
-  }, [getAllPoints]);
-
-  function handleAddForm() {
-    props.setActiveFormClass('npf--activeForm')
-    props.setSubmitFormOption('add')
-  }
   function handleUpdatePoint() {
-    props.setActiveFormClass('npf--activeForm')
+    props.setActiveFormClass('activeForm')
     props.setSubmitFormOption('update')
   }
   async function handleDeletePoint(e) {
     let deleteButton = e.currentTarget
-    const { 'AV--token': token } = parseCookies()
-    
-    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/delete-point?routeName=${router.query.routeName}`, {
-      method: 'DELETE',
-      headers: { 
-        'Content-Type': 'application/json',
-        'authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify(props.inputs),
-    })
+   
+    const { status } = await fetchApiData(`/api/routes-services/delete-point?routeId=${router.query.routeId}`, 'DELETE', props.inputs)
 
-    if(data.status === 200) {
+    if(status === 200) {
       deleteButton.nextSibling.click()
       props.setAllPoints(allPoints => (
         allPoints.filter((elem) => {
@@ -78,14 +57,19 @@ export default function Points(props) {
     }, 100)
     props.setChoosenPointKey(tr.id)
     props.updateInputs(props.allPoints[tr.id])
-    props.setOptionsActiveClass('pts--activeOptions')
+    props.setOptionsActiveClass('activeOptions')
+  }
+
+  function getPointStatus(jaPassou) {
+    return (jaPassou ? {
+      background: 'gray',
+    } : {
+      background: 'white',
+    })
   }
 
   return (
     <div >
-      {props.allPoints.length === 0 && <div className="pts--divAddButton">
-        <button className="pts--addButton" onClick={handleAddForm}>+</button>
-      </div>}
 
       {props.allPoints.length === 0? (
         <h2>Pontos de parada (0)</h2>
@@ -96,11 +80,11 @@ export default function Points(props) {
       {props.allPoints.length > 1 && (
         <div>
           {props.allCities.map((city, key) => (
-            <div key={key} className="pts--points">
+            <div key={key} className="tableContainer">
 
-              <h2>{`${city} (${props.allPoints.filter(elem => {
+              <h2>{city} ({props.allPoints.filter(elem => {
                 return rs(elem.cidade) == rs(city) && elem.id != 0
-              }).length}):`}</h2>
+              }).length}):</h2>
 
               <table>
                 <thead>
@@ -117,7 +101,12 @@ export default function Points(props) {
                   )).map( (elem, key) => {
                     if(elem.id != '0') {
                       return (
-                        <tr key={key} id={elem.id} onClick={handlePoint}>
+                        <tr 
+                          key={key} 
+                          id={elem.id} 
+                          onClick={handlePoint} 
+                          style={getPointStatus(elem.jaPassou)}
+                        >
                           <td>{elem.id}</td>
                           <td>{elem.bairro}</td>
                           <td>{elem.rua}</td>
@@ -133,25 +122,35 @@ export default function Points(props) {
         </div>
       )}
 
-      <div className={`pts--pointOptionsScreen ${props.optionsActiveClass}`}>
-        <div className="pts--pointOptionsShadow" onClick={() => {
+      <div className={`${styles.pointOptionsScreen} ${styles[props.optionsActiveClass]}`}>
+        <div className={styles.pointOptionsShadow} onClick={() => {
           props.setOptionsActiveClass('')
         }}></div>
 
-        <div className="pts--pointOptions">
-          <button onClick={handleUpdatePoint}>Editar</button>
-          {props.inputs.id != 0 && (
-            <button 
-              onClick={() => {setDeleteActiveClass('pts--deleteActiveClass')}}
-            >
-              Deletar
-            </button>
-          )}
-        </div>
+        {props.inputs.jaPassou && props.inputs.id != 0? (
+          <div className={styles.pointOptions}>
+            <p style={{color: 'gray'}}>Você já passou por este ponto</p>
+          </div>
+        ): (
+          <div className={styles.pointOptions}>
+            <button onClick={handleUpdatePoint}>Editar</button>
+            {props.inputs.id != 0 && (
+              <button 
+                onClick={() => {setFadeInWindowActive(true)}}
+              >
+                Deletar
+              </button>
+            )}
+          </div>
+        )}
+
       </div>
-      
-      <div className={`pts--areYouSureScreen ${deleteActiveClass}`}>
-        <div className="pts--areYouSure">
+
+      <FadeInWindow 
+        active={fadeInWindowActive}
+        setActive={setFadeInWindowActive}
+        action={handleDeletePoint}
+      >
           <p>Você está apagando o ponto: </p>
           <table>
             <thead>
@@ -170,24 +169,15 @@ export default function Points(props) {
                 <td>{props.inputs?.rua}</td>
                 <td>{props.inputs?.numero}</td>
               </tr>
-          </tbody>
+            </tbody>
           </table>
-          <div>
-            <button onClick={handleDeletePoint}>Continuar</button>
-            <button onClick={() => {setDeleteActiveClass('')}}>Cancelar</button>
-          </div>
-        </div>
-      </div>
+      </FadeInWindow>
       
       {props.allPoints.length > 1 && (
         <p style={{color: 'gray', fontWeight: 'bold'}}>
           clique sobre um endereço para editar ou deletar
         </p>
       )}
-
-      {props.allPoints.length > 0 && <div className="pts--divAddButton">
-        <button className="pts--addButton" onClick={handleAddForm}>+</button>
-      </div>}
       
     </div>
   )

@@ -24,7 +24,7 @@ export default function CheckPoints(props) {
     <div>
       {orderedCheckPoints.length > 0 && (
         orderedCheckPoints.map( (elem, key) => (
-        <div key={key} className="pts--points">
+        <div key={key} className="tableContainer">
           <div style={{width: '100%', textAlign: 'center'}}>
             {key > 0 && (
               <h3> {'\u2193'} {elem.distance/1000} km</h3>

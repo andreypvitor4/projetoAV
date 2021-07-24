@@ -1,8 +1,9 @@
+import { ObjectId } from "mongodb";
 import authMiddleware from "../../../middlewares/authMiddleware";
 import cors from '../../../middlewares/cors'
 import connect from '../../../utils/database'
 
-export default async function allpoints(req, res) {
+export default async function allPoints(req, res) {
   await cors(req, res)
   await authMiddleware(req, res)
 
@@ -11,13 +12,12 @@ export default async function allpoints(req, res) {
   }
 
   if(req.method === 'GET') {
+    const data = req.query
+    const {db, client} = await connect()
+
     try {
-      const data = req.query
-      const {db, client} = await connect()
-  
       const response = await db.collection(`${req.userNameInDb}${req.userId}`)
-      .findOne({routeName: data.routeName})
-      await client.close()
+      .findOne({_id: ObjectId(data.routeId) })
 
       if(!!response) {
         return res.status(200).json(response.points)
@@ -26,9 +26,11 @@ export default async function allpoints(req, res) {
       }
 
     } catch (error) {
-      console.log(error)
       return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+    }finally {
+      await client.close()
     }
+
   }else {
     return res.status(400).json({error: 'Método de request incorreto'})
   }

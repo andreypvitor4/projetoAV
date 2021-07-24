@@ -1,0 +1,158 @@
+.shadowBackground {
+  visibility: hidden;
+  overflow: hidden;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+  background-color: black;
+  -webkit-transition: all ease 0.5s;
+  transition: all ease 0.5s;
+  opacity: 0%;
+}
+
+.user {
+  visibility: hidden;
+  overflow: hidden;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  z-index: 10;
+  -webkit-transition: all ease 0.5s;
+  transition: all ease 0.5s;
+  width: 0%;
+}
+
+.shadow {
+  -webkit-box-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.shadow div {
+  color: #333;
+  background-color: #eee;
+  -webkit-box-shadow: -5px 0px 15px #1e6ff3;
+          box-shadow: -5px 0px 15px #1e6ff3;
+  height: 35px;
+  width: 40px;
+  z-index: 11;
+  margin-top: 18px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  text-align: center;
+  line-height: 35px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.shadow div span {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  top: 18px;
+  height: 35px;
+  width: 30px;
+  margin-left: 30px;
+  z-index: 12;
+  background-color: #eee;
+}
+
+.userMenu {
+  -webkit-box-flex: 1.5;
+      -ms-flex: 1.5;
+          flex: 1.5;
+  background-color: #eee;
+  -webkit-box-shadow: -5px 0px 20px #1e6ff3;
+          box-shadow: -5px 0px 20px #1e6ff3;
+  font-weight: bold;
+  color: #333;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.userMenu h1 {
+  margin: 10px;
+  border-bottom: solid 3px #0c60e9ff;
+}
+
+.userMenu div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  margin: 10px;
+}
+
+.userMenu div p {
+  margin-top: 20px;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.userMenu div button {
+  display: block;
+  background-color: #0c60e9ff;
+  color: white;
+  margin-top: 20px;
+  margin-left: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .userMenu {
+    -webkit-box-flex: 6;
+        -ms-flex: 6;
+            flex: 6;
+  }
+}
+
+.user.userMenuActive {
+  visibility: visible;
+  width: 100%;
+}
+
+.shadowBackground.userMenuActive {
+  visibility: visible;
+  opacity: 60%;
+}
+/*# sourceMappingURL=style.module.css.map */

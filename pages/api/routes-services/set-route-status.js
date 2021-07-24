@@ -1,8 +1,9 @@
+import { ObjectId } from "mongodb";
 import authMiddleware from "../../../middlewares/authMiddleware";
 import cors from '../../../middlewares/cors'
 import connect from '../../../utils/database'
 
-export default async function deletePoint(req, res) {
+export default async function setRouteStatus(req, res) {
   await cors(req, res)
   await authMiddleware(req, res)
 
@@ -13,25 +14,27 @@ export default async function deletePoint(req, res) {
   if(req.method === 'PUT') {
     let query = req.query
     const {db, client} = await connect()
+
     try {
       const response = await db.collection(`${req.userNameInDb}${req.userId}`)
-      .updateOne({routeName: query.routeName}, {
+      .updateOne({_id: ObjectId(query.routeId)}, {
         $set: {
           routeStatus: 'pronta'
         }
       })
-      await client.close()
       
       if(response.result.ok == 1) {
-        return res.status(200).json({message: 'Ponto deletado com sucesso'})
+        return res.status(200).json({message: 'rota atualizada com sucesso'})
       }else {
         return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
       }
 
     } catch (error) {
-      console.log(error)
       return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+    }finally {
+      await client.close()
     }
+
   }else {
     res.status(400).json({error: 'Método de request incorreto'})
   }

@@ -1,10 +1,12 @@
-import { parseCookies } from 'nookies'
-import { useRef } from 'react'
+import { useRef, useContext} from 'react'
 import { useRouter } from 'next/router'
+import { functionsContext } from '../contexts/globalFunctions'
+import styles from '../styles/newPointForm/style.module.css'
 
 export default function NewPointForm(props) {
   const router = useRouter()
   const cancelButtonRef = useRef(null)
+  const { fetchApiData, normalizeString: rs, handleMaxChar } = useContext(functionsContext)
   
   function resetInputs() {
     props.updateInputs({
@@ -36,11 +38,6 @@ export default function NewPointForm(props) {
   }
 
   function handleSetInputs(e) {
-    if(props.allPoints.length === 0) {
-      props.updateInputs({jaPassou: true})
-    }else {
-      props.updateInputs({jaPassou: false})
-    }
     props.updateInputs({[e.target.name]: e.target.value})
   }
 
@@ -49,47 +46,33 @@ export default function NewPointForm(props) {
     let lastIndex = props.allPoints.length === 0? -1 : Math.max(...pointsIndexes)
     let newIndex = lastIndex + 1
     props.updateInputs({id: newIndex})
-  }
-
-  function rs(string) {
-    let normalizedString = string.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-    return normalizedString.toLowerCase()
+    
+    if(newIndex === 0 ) {
+      props.updateInputs({jaPassou: true})
+    }else {
+      props.updateInputs({jaPassou: false})
+    }
   }
   
   async function handleSubmitForm(e) {
     e.preventDefault()
-    const { 'AV--token': token } = parseCookies()
     
     if(props.submitFormOption === 'add') {
-      const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/add-point?routeName=${router.query.routeName}`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(props.inputs),
-      })
-      if(data.status === 200) {
+      const { status } = await fetchApiData(`/api/routes-services/add-point?routeId=${router.query.routeId}`, 'POST', props.inputs)
+
+      if(status === 200) {
         props.setAllPoints(allPoints => [...allPoints, props.inputs])
 
         if(props.allCities.indexOf(rs(props.inputs.cidade)) == -1) {
           props.setAllCities(prev => [...prev, rs(props.inputs.cidade)])
         }
-
         resetInputs()
       }
     }
     if(props.submitFormOption === 'update') {
-      const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/routes-services/update-point?routeName=${router.query.routeName}`, {
-        method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json',
-          'authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(props.inputs),
-      })
+      const { status } = await fetchApiData(`/api/routes-services/update-point?routeId=${router.query.routeId}`, 'PUT', props.inputs)
 
-      if(data.status === 200) {
+      if(status === 200) {
         props.setAllPoints(allPoints => {
           allPoints[props.choosenPointKey] = props.inputs
           return allPoints
@@ -100,24 +83,17 @@ export default function NewPointForm(props) {
     }
   }
 
-  function handleMaxChar(e, max) {
-    let maxChar = e.currentTarget.value
-    if(e.currentTarget.value.length > max) {
-      e.currentTarget.value = maxChar.slice(0,max)
-    }
-  }
-
   function handleRemoveForm() {
     props.setActiveFormClass('')
   }
 
   return (
-    <div className={`npf--formContainer ${props.activeFormClass}`}>
-        <div className="npf--formShadow"></div>
+    <div className={`${styles.formContainer} ${styles[props.activeFormClass]}`}>
+        <div className={styles.formShadow}></div>
         
-        <form className="npf--form" onSubmit={handleSubmitForm}>
+        <form className={styles.form} onSubmit={handleSubmitForm}>
 
-          <div className="npf--inputDiv">
+          <div className={styles.inputDiv}>
             <label htmlFor="npf--cep">Cep</label>
             <input 
               type="text" 
@@ -130,8 +106,8 @@ export default function NewPointForm(props) {
             />
           </div>
           
-          <div className="twoInputsContainer">
-            <div className="npf--inputDiv">
+          <div className={styles.twoInputsContainer}>
+            <div className={styles.inputDiv}>
               <label htmlFor="cidade">Cidade*</label>
               <input 
                 type="text" 
@@ -144,7 +120,7 @@ export default function NewPointForm(props) {
               />
             </div>
 
-            <div className="npf--inputDiv">
+            <div className={styles.inputDiv}>
               <label htmlFor="npf--estado">Estado*</label>
               <input 
                 type="text" 
@@ -157,7 +133,7 @@ export default function NewPointForm(props) {
             </div>
           </div>
 
-          <div className="npf--inputDiv">
+          <div className={styles.inputDiv}>
             <label htmlFor="npf--bairro">Bairro</label>
             <input 
               type="text"
@@ -168,8 +144,8 @@ export default function NewPointForm(props) {
             />
           </div>
 
-          <div className="twoInputsContainer">
-            <div className="npf--inputDiv">
+          <div className={styles.twoInputsContainer}>
+            <div className={styles.inputDiv}>
               <label htmlFor="npf--rua">Rua</label>
               <input 
                 type="text" 
@@ -180,7 +156,7 @@ export default function NewPointForm(props) {
               />
             </div>
 
-            <div className="npf--inputDiv">
+            <div className={styles.inputDiv}>
               <label htmlFor="npf--numero">Número</label>
               <input 
                 type="text"
@@ -192,7 +168,7 @@ export default function NewPointForm(props) {
             </div>
           </div>
 
-          <div className="npf--buttons">
+          <div className={styles.buttons}>
             <button type="submit">Enviar</button>
             <button 
             type="button" 

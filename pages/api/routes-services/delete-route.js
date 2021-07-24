@@ -1,7 +1,7 @@
+import { ObjectId } from "mongodb";
 import authMiddleware from "../../../middlewares/authMiddleware";
 import cors from '../../../middlewares/cors'
 import connect from '../../../utils/database'
-import { ObjectId } from "mongodb";
 
 export default async function deleteRoute(req, res) {
   await cors(req, res)
@@ -16,10 +16,8 @@ export default async function deleteRoute(req, res) {
     const {db, client} = await connect()
 
     try {
-
       const response = await db.collection(`${req.userNameInDb}${req.userId}`)
-      .deleteOne({routeName: data.routeName})
-      await client.close()
+      .deleteOne({_id: ObjectId(data.routeId)})
 
       if(response.deletedCount == 1) {
         return res.status(200).json({message: 'deletado com sucesso.'})
@@ -28,8 +26,9 @@ export default async function deleteRoute(req, res) {
       }
 
     } catch (error) {
-      console.log(error)
       return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+    }finally {
+      await client.close()
     }
 
   }else {

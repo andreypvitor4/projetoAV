@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import authMiddleware from "../../../middlewares/authMiddleware";
 import cors from '../../../middlewares/cors'
 import connect from '../../../utils/database'
@@ -18,12 +19,11 @@ export default async function updatePoint(req, res) {
 
     try {
       const response = await db.collection(`${req.userNameInDb}${req.userId}`)
-      .updateOne({routeName: query.routeName, "points.id": data.id}, {
+      .updateOne({_id: ObjectId(query.routeId), "points.id": data.id}, {
         $set: {
           "points.$": data
         }
       })
-      await client.close()
 
       if(!!response.result.ok == 1) {
         return res.status(200).json({message: 'Ponto alterado com sucesso'})
@@ -32,9 +32,11 @@ export default async function updatePoint(req, res) {
       }
 
     } catch (error) {
-      console.log(error)
       return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+    }finally {
+      await client.close()
     }
+
   }else {
     return res.status(400).json({error: 'Método de request incorreto'})
   }

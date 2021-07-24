@@ -1,0 +1,155 @@
+@import '../variables';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pcEditArea, .pcDeleteArea {
+  display: none;
+  @media (min-width: 700px) {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 110px;
+    width: 100px;
+    cursor: initial;
+    transition: all ease 0.1s;
+    visibility: hidden;
+    opacity: 0%;  
+  }
+}
+.pcEditArea {
+  left: -90px;
+}
+.pcDeleteArea {
+    right: -90px;
+}
+.pcEdit, .pcDelete {
+  display: none;
+  @media(min-width: 700px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all ease 0.1s;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}
+.pcEdit {
+  background-color: $primaryColor;
+}
+.pcDelete {
+  background-color: rgba(226, 2, 2, 0.829);
+}
+
+.routeShadow {
+  display: none;
+  z-index: 10;
+  position: absolute;
+  left: 0px;
+  margin-top: -5px;
+  height: 120px;
+  width: 100vw;
+  background-color: rgb(219, 3, 3);
+  opacity: 0;
+  transition: 0s;
+}
+.route {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  border-radius: 10px;
+  border: solid 2px $primaryColor;
+  overflow: hidden;
+  font-weight: bold;
+  font-size: 10pt;
+  cursor: pointer;
+  margin: 10px 0px;
+  transition: all ease 0.1s;
+  @media (min-width: 700px) {
+    &:hover {
+      width: 97%;
+    }
+  }
+}
+.routeName {
+  background-color: $primaryColor;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  p {
+    padding: 0px 10px;
+  }
+
+}
+.status {
+  font-size: 8pt;
+}
+.routeDescription {
+  background-color: white;
+  color: #333;
+  p {
+    padding: 0px 10px;
+  }
+}
+
+.areYouSureScreen {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.452);
+  transition: all ease 0.3s;
+  visibility: hidden;
+  opacity: 0;
+}
+.areYouSure {
+  position: fixed;
+  margin: auto;
+  padding: 20px;
+  margin: 0px 5px;
+  border: 4px solid rgb(202, 15, 15);
+  border-radius: 6px;
+  background-color: #e7e7e7;
+  font-weight: bold;
+  th {
+    padding: 10px;
+    background-color: $primaryColor;
+  }
+  table {
+    margin-bottom: 30px;
+  }
+  button {
+    cursor: pointer;
+  }
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button:first-child {
+      background-color: rgb(202, 15, 15);
+    }
+    button:last-child {
+      background-color: #333;
+    }
+  }
+}
+.areYouSureScreen.deleteActiveClass {
+  visibility: visible;
+  opacity: 100;
+}

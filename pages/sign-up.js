@@ -1,14 +1,18 @@
 import Head from 'next/head'
 import Link from "next/link"
 import { useState, useContext, useRef } from 'react'
-import { AuthContext } from '../contexts/authContext'
 import Router from 'next/router'
 import Image from 'next/image'
 import logo from '../public/logoAV.png'
+import { AuthContext } from '../contexts/authContext'
+import { functionsContext } from '../contexts/globalFunctions'
+import styles from '../styles/login/style.module.css'
 
 export default function SignUp() {
-  const [signUpError, setSignUpError] = useState(false);
   const { signIn } = useContext(AuthContext)
+  const { fetchApiData, updateInputs, handleMaxChar } = useContext(functionsContext)
+
+  const [signUpError, setSignUpError] = useState(false);
   const sendButtonRef = useRef(null)
   const confirmPasswordRef = useRef(null)
 
@@ -17,36 +21,21 @@ export default function SignUp() {
     email: '',
     password: '',
   });
-  
-  function updateInputs(newInputs) {
-    setInputs(prevState => {
-      return (
-        {
-        ...prevState,
-        ...newInputs
-        }
-      )
-    })
-  }
 
   function handleSetInputs(e) {
-    updateInputs({[e.target.name]: e.target.value})
+    updateInputs({[e.target.name]: e.target.value}, setInputs)
   }
 
   async function submitSignIn(e) {
     e.preventDefault()
-  
-    const req = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(inputs)
-    })
-    if(req.status === 200) {
+
+    const { status, data } = await fetchApiData('/api/auth-services/register', 'POST', inputs)
+
+    if(status === 200) {
       await signIn(inputs, false)
       Router.push('/')
     }else {
-      const reqData = await req.json()
-      setSignUpError(reqData.error)
+      setSignUpError(data.error)
     }
   }
 
@@ -55,18 +44,11 @@ export default function SignUp() {
     let validate = emailTextValidate(input.value)
   
     if(validate) {
-      const req = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/email-availability`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: input.value,
-          }),
-        })
+      const { status, data } = await fetchApiData('/api/auth-services/email-availability', 'POST', { email: input.value })
       
-      if(req.status === 200) {
-        const { emailAvailable } = await req.json()
+      if(status === 200) {
   
-        if(emailAvailable) {
+        if(data.emailAvailable) {
           input.nextSibling.innerText = 'Email disponível'
           input.nextSibling.style.color = 'green'
           
@@ -103,13 +85,6 @@ export default function SignUp() {
       }
     }
   }
-
-  function handleMaxChar(e) {
-    let maxChar = e.currentTarget.value
-    if(e.currentTarget.value.length > 30) {
-      e.currentTarget.value = maxChar.slice(0,30)
-    }
-  }
   
   function emailTextValidate(text) {
     let charPosition = text.indexOf('@')
@@ -120,18 +95,18 @@ export default function SignUp() {
   }
 
   return(
-    <div className="login">
+    <div className={styles.login}>
       <Head>
         <title>Criar conta</title>
       </Head>
 
-      <div className="login--container">
+      <div className={styles.container}>
           <Link href="/">
-            <a className="login--logo"> <Image src={logo} alt="logo" /> </a>
+            <a className={styles.logo}> <Image src={logo} alt="logo" /> </a>
           </Link>
-          <form className="login--form" onSubmit={submitSignIn}>
+          <form className={styles.form} onSubmit={submitSignIn}>
             <h2>Criar nova conta</h2>
-            <div className="login--user">
+            <div className={styles.user}>
               <label htmlFor="login__user">Nome de usuário</label>
               <input 
                 type="text" 
@@ -141,7 +116,7 @@ export default function SignUp() {
                 onChange={e => {handleMaxChar(e); handleSetInputs(e)}}
               />
             </div>
-            <div className="login--user">
+            <div className={styles.user}>
               <label htmlFor="login__email">Email</label>
               <div>
                 <input 
@@ -152,10 +127,10 @@ export default function SignUp() {
                   required
                   onChange={e => {handleMaxChar(e); handleSetInputs(e)}}
                   onBlur={handleEmailAvailability}
-                /><span className="login--validate"></span>
+                /><span className={styles.validate}></span>
               </div>
             </div>
-            <div className="login--password">
+            <div className={styles.password}>
               <label htmlFor="login__password">Senha</label>
               <input 
                 type="password" 
@@ -166,7 +141,7 @@ export default function SignUp() {
                 onBlur={handlePassword}
               />
             </div>
-            <div className="login--password">
+            <div className={styles.password}>
               <label htmlFor="login__confirmPassword">Confirmar senha</label>
               <input 
                 type="password" 
@@ -175,15 +150,15 @@ export default function SignUp() {
                 required
                 onChange={handleMaxChar}
                 onBlur={handlePassword}
-              /><span className="login--validate" ref={confirmPasswordRef}></span>
+              /><span className={styles.validate} ref={confirmPasswordRef}></span>
             </div>
-            <div className="login--continue">
-              <input className="login--button" type="submit" value="Criar conta" ref={sendButtonRef}/>
+            <div className={styles.continue}>
+              <input className={styles.button} type="submit" value="Criar conta" ref={sendButtonRef}/>
             </div>
           </form>
 
           {signUpError && (
-          <p className="login--error">
+          <p className={styles.error}>
             {signUpError}
           </p>)}
       </div>

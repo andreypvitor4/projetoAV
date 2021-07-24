@@ -1,0 +1,47 @@
+@import '../variables';
+
+.container {
+  position: relative;
+  width: 98vw;
+  margin: 15px auto;
+  border: solid 2px #333;
+  border-radius: 6px;
+  padding: 5px;
+}
+.startPoint {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-bottom: solid 2px #333;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+  tr {
+    transition: all ease 0.1s;
+  }
+}
+
+.divAddButton {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.addButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  margin: 20px;
+  margin-right: 0px;
+  border-radius: 50%;
+  border: none;
+  background-color: $primaryColor;
+  color: white;
+  font-size: 35px;
+  user-select: none;
+  cursor: pointer;
+  transition: all ease 0.1s;
+  &:hover {
+    transform: scale(1.1)
+  }
+}

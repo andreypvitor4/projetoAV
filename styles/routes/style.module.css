@@ -1,0 +1,225 @@
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.pcEditArea, .pcDeleteArea {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .pcEditArea, .pcDeleteArea {
+    position: absolute;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    height: 110px;
+    width: 100px;
+    cursor: initial;
+    -webkit-transition: all ease 0.1s;
+    transition: all ease 0.1s;
+    visibility: hidden;
+    opacity: 0%;
+  }
+}
+
+.pcEditArea {
+  left: -90px;
+}
+
+.pcDeleteArea {
+  right: -90px;
+}
+
+.pcEdit, .pcDelete {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .pcEdit, .pcDelete {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    -webkit-transition: all ease 0.1s;
+    transition: all ease 0.1s;
+  }
+  .pcEdit:hover, .pcDelete:hover {
+    -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+  }
+}
+
+.pcEdit {
+  background-color: #0c60e9ff;
+}
+
+.pcDelete {
+  background-color: rgba(226, 2, 2, 0.829);
+}
+
+.routeShadow {
+  display: none;
+  z-index: 10;
+  position: absolute;
+  left: 0px;
+  margin-top: -5px;
+  height: 120px;
+  width: 100vw;
+  background-color: #db0303;
+  opacity: 0;
+  -webkit-transition: 0s;
+  transition: 0s;
+}
+
+.route {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 95%;
+  border-radius: 10px;
+  border: solid 2px #0c60e9ff;
+  overflow: hidden;
+  font-weight: bold;
+  font-size: 10pt;
+  cursor: pointer;
+  margin: 10px 0px;
+  -webkit-transition: all ease 0.1s;
+  transition: all ease 0.1s;
+}
+
+@media (min-width: 700px) {
+  .route:hover {
+    width: 97%;
+  }
+}
+
+.routeName {
+  background-color: #0c60e9ff;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.routeName p {
+  padding: 0px 10px;
+}
+
+.status {
+  font-size: 8pt;
+}
+
+.routeDescription {
+  background-color: white;
+  color: #333;
+}
+
+.routeDescription p {
+  padding: 0px 10px;
+}
+
+.areYouSureScreen {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.452);
+  -webkit-transition: all ease 0.3s;
+  transition: all ease 0.3s;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.areYouSure {
+  position: fixed;
+  margin: auto;
+  padding: 20px;
+  margin: 0px 5px;
+  border: 4px solid #ca0f0f;
+  border-radius: 6px;
+  background-color: #e7e7e7;
+  font-weight: bold;
+}
+
+.areYouSure th {
+  padding: 10px;
+  background-color: #0c60e9ff;
+}
+
+.areYouSure table {
+  margin-bottom: 30px;
+}
+
+.areYouSure button {
+  cursor: pointer;
+}
+
+.areYouSure div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.areYouSure div button:first-child {
+  background-color: #ca0f0f;
+}
+
+.areYouSure div button:last-child {
+  background-color: #333;
+}
+
+.areYouSureScreen.deleteActiveClass {
+  visibility: visible;
+  opacity: 100;
+}
+/*# sourceMappingURL=style.module.css.map */

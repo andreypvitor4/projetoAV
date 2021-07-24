@@ -14,6 +14,7 @@ async function register(req, res) {
       const user = await db.collection('users').findOne({ email })
       
       if(user) {
+        await client.close()
         return res.status(400).json({error: 'Este email já existe'})
       }
 
@@ -24,7 +25,7 @@ async function register(req, res) {
       req.body.date = new Date()
 
       const newUser = await db.collection('users').insertOne(req.body)
-      await client.close()
+      
       if(!!newUser.ops[0]) {
         return res.status(200).json({
           token: generateToken({id: newUser.ops[0]._id})
@@ -34,9 +35,11 @@ async function register(req, res) {
       }
 
     } catch (error) {
-      console.log(error)
       return res.status(400).json({error: 'Ocorreu um erro, tente novamente'})
+    }finally {
+      await client.close()
     }
+
   }else{
     return res.status(400).json({error: 'Método de request incorreto'})
   }

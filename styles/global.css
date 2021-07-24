@@ -63,4 +63,20 @@ td {
   font-weight: bold;
   text-align: center;
 }
+
+.tableContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+}
+
+.tableContainer tr {
+  -webkit-transition: all ease 0.1s;
+  transition: all ease 0.1s;
+}
 /*# sourceMappingURL=global.css.map */

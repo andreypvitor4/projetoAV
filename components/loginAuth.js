@@ -10,16 +10,14 @@ export default function LoginAuth({ children }) {
     }
 
     if(token) {
-      fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/authenticated-user`, {
+      fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/user`, {
         method: 'GET',
         headers: { 
           'Content-Type': 'application/json',
           'authorization': `Bearer ${token}`,
         },
       }).then( data => {
-        return data.json()
-      }).then( ({ isAuthenticated }) => {
-        if(!isAuthenticated) Router.push('/login')
+        if(data.status != 200) Router.push('/login')
       })
     }
 
