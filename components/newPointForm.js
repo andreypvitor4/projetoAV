@@ -1,12 +1,18 @@
-import { useRef, useContext} from 'react'
+import { useRef, useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import { functionsContext } from '../contexts/globalFunctions'
+import ClipLoader from "react-spinners/ClipLoader"
+import { css } from "@emotion/react"
 import styles from '../styles/newPointForm/style.module.css'
 
 export default function NewPointForm(props) {
   const router = useRouter()
   const cancelButtonRef = useRef(null)
   const { fetchApiData, normalizeString: rs, handleMaxChar } = useContext(functionsContext)
+  const [loading, setLoading] = useState(false);
+  // const override = css`
+  //   margin: 125px 175px;
+  // `
   
   function resetInputs() {
     props.updateInputs({
@@ -58,7 +64,9 @@ export default function NewPointForm(props) {
     e.preventDefault()
     
     if(props.submitFormOption === 'add') {
+      setLoading(true)
       const { status } = await fetchApiData(`/api/routes-services/add-point?routeId=${router.query.routeId}`, 'POST', props.inputs)
+      setLoading(false)
 
       if(status === 200) {
         props.setAllPoints(allPoints => [...allPoints, props.inputs])
@@ -70,7 +78,9 @@ export default function NewPointForm(props) {
       }
     }
     if(props.submitFormOption === 'update') {
+      setLoading(true)
       const { status } = await fetchApiData(`/api/routes-services/update-point?routeId=${router.query.routeId}`, 'PUT', props.inputs)
+      setLoading(false)
 
       if(status === 200) {
         props.setAllPoints(allPoints => {
@@ -93,91 +103,100 @@ export default function NewPointForm(props) {
         
         <form className={styles.form} onSubmit={handleSubmitForm}>
 
-          <div className={styles.inputDiv}>
-            <label htmlFor="npf--cep">Cep</label>
-            <input 
-              type="text" 
-              id="npf--cep" 
-              name="cep" 
-              value={props.inputs.cep} 
-              onChange={e => {handleMaxChar(e, 20); handleSetInputs(e);}} 
-              onBlur={handleCep} 
-              onClick={setInputsIndex}
-            />
-          </div>
-          
-          <div className={styles.twoInputsContainer}>
-            <div className={styles.inputDiv}>
-              <label htmlFor="cidade">Cidade*</label>
-              <input 
-                type="text" 
-                id="cidade" 
-                name="cidade"
-                required
-                value={props.inputs.cidade} 
-                onChange={e => {handleMaxChar(e, 30); handleSetInputs(e);}}
-                onBlur={setInputsIndex}
-              />
+          {loading? (
+            <div className={styles.loading}>
+              <ClipLoader size={150} />
             </div>
+          ) : (
+            <div>
+              <div className={styles.inputDiv}>
+                <label htmlFor="npf--cep">Cep</label>
+                <input 
+                  type="text" 
+                  id="npf--cep" 
+                  name="cep" 
+                  value={props.inputs.cep} 
+                  onChange={e => {handleMaxChar(e, 20); handleSetInputs(e);}} 
+                  onBlur={handleCep} 
+                  onClick={setInputsIndex}
+                />
+              </div>
+              
+              <div className={styles.twoInputsContainer}>
+                <div className={styles.inputDiv}>
+                  <label htmlFor="cidade">Cidade*</label>
+                  <input 
+                    type="text" 
+                    id="cidade" 
+                    name="cidade"
+                    required
+                    value={props.inputs.cidade} 
+                    onChange={e => {handleMaxChar(e, 30); handleSetInputs(e);}}
+                    onBlur={setInputsIndex}
+                  />
+                </div>
 
-            <div className={styles.inputDiv}>
-              <label htmlFor="npf--estado">Estado*</label>
-              <input 
-                type="text" 
-                id="npf--estado" 
-                name="estado"
-                required
-                value={props.inputs.estado} 
-                onChange={e => {handleMaxChar(e, 2); handleSetInputs(e);}}
-              />
+                <div className={styles.inputDiv}>
+                  <label htmlFor="npf--estado">Estado*</label>
+                  <input 
+                    type="text" 
+                    id="npf--estado" 
+                    name="estado"
+                    required
+                    value={props.inputs.estado} 
+                    onChange={e => {handleMaxChar(e, 2); handleSetInputs(e);}}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.inputDiv}>
+                <label htmlFor="npf--bairro">Bairro</label>
+                <input 
+                  type="text"
+                  id="npf--bairro"
+                  name="bairro"
+                  value={props.inputs.bairro}
+                  onChange={e => {handleMaxChar(e, 50); handleSetInputs(e);}}
+                />
+              </div>
+
+              <div className={styles.twoInputsContainer}>
+                <div className={styles.inputDiv}>
+                  <label htmlFor="npf--rua">Rua</label>
+                  <input 
+                    type="text" 
+                    id="npf--rua" 
+                    name="rua" 
+                    value={props.inputs.rua} 
+                    onChange={e => {handleMaxChar(e, 50); handleSetInputs(e);}}
+                  />
+                </div>
+
+                <div className={styles.inputDiv}>
+                  <label htmlFor="npf--numero">Número</label>
+                  <input 
+                    type="text"
+                    id="npf--numero"
+                    name="numero"
+                    value={props.inputs.numero}
+                    onChange={e => {handleMaxChar(e, 10); handleSetInputs(e);}}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.buttons}>
+                <button type="submit">Enviar</button>
+                <button 
+                type="button" 
+                onClick={handleRemoveForm}
+                ref={cancelButtonRef}>
+                  Cancelar
+                </button>
+                <button type="reset" onClick={resetInputs}>Limpar dados</button>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className={styles.inputDiv}>
-            <label htmlFor="npf--bairro">Bairro</label>
-            <input 
-              type="text"
-              id="npf--bairro"
-              name="bairro"
-              value={props.inputs.bairro}
-              onChange={e => {handleMaxChar(e, 50); handleSetInputs(e);}}
-            />
-          </div>
-
-          <div className={styles.twoInputsContainer}>
-            <div className={styles.inputDiv}>
-              <label htmlFor="npf--rua">Rua</label>
-              <input 
-                type="text" 
-                id="npf--rua" 
-                name="rua" 
-                value={props.inputs.rua} 
-                onChange={e => {handleMaxChar(e, 50); handleSetInputs(e);}}
-              />
-            </div>
-
-            <div className={styles.inputDiv}>
-              <label htmlFor="npf--numero">Número</label>
-              <input 
-                type="text"
-                id="npf--numero"
-                name="numero"
-                value={props.inputs.numero}
-                onChange={e => {handleMaxChar(e, 10); handleSetInputs(e);}}
-              />
-            </div>
-          </div>
-
-          <div className={styles.buttons}>
-            <button type="submit">Enviar</button>
-            <button 
-            type="button" 
-            onClick={handleRemoveForm}
-            ref={cancelButtonRef}>
-              Cancelar
-            </button>
-            <button type="reset" onClick={resetInputs}>Limpar dados</button>
-          </div>
 
         </form>
       </div>

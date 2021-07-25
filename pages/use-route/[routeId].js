@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import ClipLoader from "react-spinners/ClipLoader"
 import { AuthContext } from '../../contexts/authContext'
 import CheckPoints from "../../components/checkPoints";
 import { functionsContext } from '../../contexts/globalFunctions'
@@ -10,6 +11,8 @@ export default function UseRoute() {
   const { fetchApiData } = useContext(functionsContext)
   const { setRCount } = useContext(AuthContext)
 
+  const [loading, setLoading] = useState(false);
+  const [nextPointLoaidng, setNextPointLoaidng] = useState(false);
   const [authError, setAuthError] = useState(false);
   const [allPoints, setAllPoints] = useState([]);
   const [allCheckPoints, setAllCheckPoints] = useState([]);
@@ -18,8 +21,10 @@ export default function UseRoute() {
 
   useEffect(()=> {
     if(!!router.query.routeId) {
+      setLoading(true)
       fetchApiData(`/api/routes-services/all-points?routeId=${router.query.routeId}`, 'GET')
       .then(({status, data: points}) => {
+        setLoading(false)
 
         if(status == 200) {
           const checkPoints = points.filter(elem => elem.jaPassou)
@@ -49,6 +54,7 @@ export default function UseRoute() {
 
     const body = {allPoints, lastPoint}
 
+    setNextPointLoaidng(true)
     const {data: nextPoint, status: nextPointStatus} = await fetchApiData('/api/routes-services/next-check-point', 'POST', body)
 
     const updatedNextPoint = {
@@ -58,6 +64,7 @@ export default function UseRoute() {
     }
 
     const { status } = await fetchApiData(`/api/routes-services/update-point?routeId=${router.query.routeId}`, 'PUT', updatedNextPoint)
+    setNextPointLoaidng(false)
 
     if(status === 200 && nextPointStatus === 200) {
       updateAllPoints(updatedNextPoint)
@@ -99,13 +106,20 @@ export default function UseRoute() {
         <div className={styles.checkPoints}>
           <h2>Pontos de parada ({allCheckPoints.length})</h2>
         </div>
-        <CheckPoints 
-          allPoints={allPoints} 
-          setAllPoints={setAllPoints}
-          allCheckPoints={allCheckPoints}
-          setAllCheckPoints={setAllCheckPoints}
-          allCities={allCities}
-        />
+
+        {loading? (
+          <div className={styles.loading}>
+            <ClipLoader size={150} />
+          </div>
+        ): (
+          <CheckPoints 
+            allPoints={allPoints} 
+            setAllPoints={setAllPoints}
+            allCheckPoints={allCheckPoints}
+            setAllCheckPoints={setAllCheckPoints}
+            allCities={allCities}
+          />
+        )}
 
         {authError && (
           <div className={styles.authError}>
@@ -113,14 +127,19 @@ export default function UseRoute() {
           </div>
         )}
 
-        {!(allPoints.length === allCheckPoints.length) ?
-          <div className={styles.buttons}>
-            <button onClick={handleNextCheckPoint}>Próximo ponto</button>
-          </div> :
-          <div className={styles.buttons}>
-            <button>Você chegou ao final</button>
+        {nextPointLoaidng ? (
+          <div className={styles.loading}>
+            <ClipLoader size={150} />
           </div>
-        }
+        ) : (
+          !(allPoints.length === allCheckPoints.length) ?
+            <div className={styles.buttons}>
+              <button onClick={handleNextCheckPoint}>Próximo ponto</button>
+            </div> :
+            <div className={styles.buttons}>
+              <button>Você chegou ao final</button>
+            </div>
+        )}
         
       </main>
     </div>

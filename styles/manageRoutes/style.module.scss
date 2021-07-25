@@ -1,5 +1,12 @@
 @import '../variables';
 
+.loading {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
   position: relative;
   width: 100vw;
@@ -116,10 +123,11 @@
   width: 50%;
   height: 50vh;
   margin-bottom: 50px;
-  overflow: scroll;
+  
   @media (max-width: 700px) {
     width: 80%;
     height: 60vh;
+    overflow: scroll;
   }
 }
 

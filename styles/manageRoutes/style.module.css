@@ -1,3 +1,16 @@
+.loading {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .container {
   position: relative;
   width: 100vw;
@@ -168,13 +181,13 @@
   width: 50%;
   height: 50vh;
   margin-bottom: 50px;
-  overflow: scroll;
 }
 
 @media (max-width: 700px) {
   .formContainer.activeForm .form {
     width: 80%;
     height: 60vh;
+    overflow: scroll;
   }
 }
 
