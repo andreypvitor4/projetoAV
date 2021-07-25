@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router'
+import ClipLoader from "react-spinners/ClipLoader"
 import { functionsContext } from '../contexts/globalFunctions'
 import FadeInWindow from '../components/fadeInWindow'
 import styles from '../styles/points/style.module.css'
@@ -7,13 +8,16 @@ import styles from '../styles/points/style.module.css'
 export default function Points(props) {
   const { fetchApiData, normalizeString: rs } = useContext(functionsContext)
   const [fadeInWindowActive, setFadeInWindowActive] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter()
 
   useEffect(() => {
     if(!!router.query.routeId) {
 
+      setLoading(true)
       fetchApiData(`/api/routes-services/all-points?routeId=${router.query.routeId}`, 'GET').then(({status, data: points}) => {
+        setLoading(false)
 
         if(status == 200) {
           props.setAllPoints(points)
@@ -71,56 +75,69 @@ export default function Points(props) {
   return (
     <div >
 
+      {loading && (
+        <div className={styles.loading}>
+          <ClipLoader size={150} />
+        </div>
+      )}
+
       {props.allPoints.length === 0? (
         <h2>Pontos de parada (0)</h2>
       ): (
         <h2>Pontos de parada ({props.allPoints.length - 1})</h2>
       )}
-      
-      {props.allPoints.length > 1 && (
-        <div>
-          {props.allCities.map((city, key) => (
-            <div key={key} className="tableContainer">
 
-              <h2>{city} ({props.allPoints.filter(elem => {
-                return rs(elem.cidade) == rs(city) && elem.id != 0
-              }).length}):</h2>
-
-              <table>
-                <thead>
-                  <tr>
-                    <th>id</th>
-                    <th>Bairro</th>
-                    <th>Rua</th>
-                    <th>Número</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {props.allPoints.filter(elem => (
-                    rs(elem.cidade) == rs(city)
-                  )).map( (elem, key) => {
-                    if(elem.id != '0') {
-                      return (
-                        <tr 
-                          key={key} 
-                          id={elem.id} 
-                          onClick={handlePoint} 
-                          style={getPointStatus(elem.jaPassou)}
-                        >
-                          <td>{elem.id}</td>
-                          <td>{elem.bairro}</td>
-                          <td>{elem.rua}</td>
-                          <td>{elem.numero}</td>
-                        </tr>
-                      )
-                    }
-                  })}
-                </tbody>
-              </table>
+        {/* {loading? (
+          <div className={styles.loading}>
+            <ClipLoader size={150} />
+          </div>
+        ): ( */}
+          {props.allPoints.length > 1 && (
+            <div>
+              {props.allCities.map((city, key) => (
+                <div key={key} className="tableContainer">
+    
+                  <h2>{city} ({props.allPoints.filter(elem => {
+                    return rs(elem.cidade) == rs(city) && elem.id != 0
+                  }).length}):</h2>
+    
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>id</th>
+                        <th>Bairro</th>
+                        <th>Rua</th>
+                        <th>Número</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {props.allPoints.filter(elem => (
+                        rs(elem.cidade) == rs(city)
+                      )).map( (elem, key) => {
+                        if(elem.id != '0') {
+                          return (
+                            <tr 
+                              key={key} 
+                              id={elem.id} 
+                              onClick={handlePoint} 
+                              style={getPointStatus(elem.jaPassou)}
+                            >
+                              <td>{elem.id}</td>
+                              <td>{elem.bairro}</td>
+                              <td>{elem.rua}</td>
+                              <td>{elem.numero}</td>
+                            </tr>
+                          )
+                        }
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          )}
+        {/* )} */}
+      
 
       <div className={`${styles.pointOptionsScreen} ${styles[props.optionsActiveClass]}`}>
         <div className={styles.pointOptionsShadow} onClick={() => {

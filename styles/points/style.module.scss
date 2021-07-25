@@ -1,5 +1,13 @@
 @import '../variables';
 
+.loading {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .points {
   display: flex;
   flex-direction: column;
