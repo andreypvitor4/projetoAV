@@ -68,7 +68,7 @@ export default function Points(props) {
     return (jaPassou ? {
       background: 'gray',
     } : {
-      background: 'white',
+      background: '#eee',
     })
   }
 
@@ -87,11 +87,6 @@ export default function Points(props) {
         <h2>Pontos de parada ({props.allPoints.length - 1})</h2>
       )}
 
-        {/* {loading? (
-          <div className={styles.loading}>
-            <ClipLoader size={150} />
-          </div>
-        ): ( */}
           {props.allPoints.length > 1 && (
             <div>
               {props.allCities.map((city, key) => (
@@ -136,8 +131,6 @@ export default function Points(props) {
               ))}
             </div>
           )}
-        {/* )} */}
-      
 
       <div className={`${styles.pointOptionsScreen} ${styles[props.optionsActiveClass]}`}>
         <div className={styles.pointOptionsShadow} onClick={() => {
