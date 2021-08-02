@@ -118,9 +118,7 @@ export default function ManageRoutes() {
               </div>
             </div>
           )}
-
-
-      </form>
+        </form>
           
       </div>
 

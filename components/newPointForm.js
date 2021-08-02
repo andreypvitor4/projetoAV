@@ -10,9 +10,6 @@ export default function NewPointForm(props) {
   const cancelButtonRef = useRef(null)
   const { fetchApiData, normalizeString: rs, handleMaxChar } = useContext(functionsContext)
   const [loading, setLoading] = useState(false);
-  // const override = css`
-  //   margin: 125px 175px;
-  // `
   
   function resetInputs() {
     props.updateInputs({
@@ -109,6 +106,10 @@ export default function NewPointForm(props) {
             </div>
           ) : (
             <div>
+              <div style={{fontSize: '10pt', textAlign: 'center'}}>
+                Campos com * são obrigatórios
+              </div>
+              
               <div className={styles.inputDiv}>
                 <label htmlFor="npf--cep">Cep</label>
                 <input 

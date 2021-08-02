@@ -27,7 +27,7 @@ export default function CheckPoints(props) {
         <div key={key} className="tableContainer">
           <div style={{width: '100%', textAlign: 'center'}}>
             {key > 0 && (
-              <h3> {'\u2193'} {elem.distance/1000} km</h3>
+              <h3> {'\u2193'} {(elem.distance/1000).toFixed(2).replace('.', ',')} km</h3>
             )}
           </div>
           <h4 style={{margin: '2px'}}>
@@ -56,11 +56,11 @@ export default function CheckPoints(props) {
         </div>
         ))
       )}
-      <h3>Distância total: {(orderedCheckPoints.map(elem => (
+      <h3>Distância total: {((orderedCheckPoints.map(elem => (
         elem.id == 0? 0: elem.distance
       )).reduce( (a, b) => {
           return a + b
-        }, 0))/1000} km
+        }, 0))/1000).toFixed(2).replace('.', ',')} km
       </h3>
     </div>
   )

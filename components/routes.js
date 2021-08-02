@@ -21,9 +21,9 @@ export default function Routes(props) {
     setLoading(true)
     fetchApiData('/api/routes-services/all-routes')
     .then(({ data: routes, status }) => {
+      setLoading(false)
       if(status === 200) {
         props.setAllRoutes(routes)
-        setLoading(false)
       }
     })
   }, [])
@@ -62,7 +62,6 @@ function handleTouchEnd(routeId, routeName) {
   
     div.firstChild.style.display = 'none'
     div.firstChild.style.opacity = '0'
-    console.log(touchPosition)
 
     if(touchPosition > 210) {
       Router.push(`/create-route/${routeId}`)
@@ -119,7 +118,6 @@ async function handleDeleteRoute(e) {
   return (
     <div style={{overflow: 'hidden'}}>
 
-
       {loading? (
         <div className={styles.loading}>
           <ClipLoader size={150} />
@@ -147,13 +145,14 @@ async function handleDeleteRoute(e) {
                 onTouchEnd={handleTouchEnd(elem._id, elem.routeName)}
               >
 
-                {touchPosition < 0 ? 
+                {touchPosition < 0 ? (
                   <span 
                     className={styles.routeShadow} 
                     style={{color: 'white', lineHeight: '100px', fontSize: '50px', textAlign: 'center'}}
                     >
                     X
-                  </span>:
+                  </span> 
+                ): (
                   <span 
                     className={styles.routeShadow}
                     style={{color: 'white', lineHeight: '130px', textAlign: 'center'}}
@@ -162,7 +161,7 @@ async function handleDeleteRoute(e) {
                       width: '50px'
                     }}/>
                   </span>
-                }
+                )}
 
                 <div className={styles.routeName}>
                   <p>{elem.routeName}</p>

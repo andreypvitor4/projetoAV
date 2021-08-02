@@ -1,29 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { parseCookies } from 'nookies'
 import Router from 'next/router'
 import FadeInWindow from '../components/fadeInWindow';
+import { functionsContext } from '../contexts/globalFunctions'
+import style from '../styles/adm/style.module.css'
+import pStyle from '../styles/points/style.module.css'
 
 export default function Adm() {
+  const { fetchApiData, updateInputs } = useContext(functionsContext)
+
   useEffect(() => {
     const { 'AV--token': token } = parseCookies()
     if(!token) {
       Router.push('/login')
-    }
-
-    if(token) {
-      fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/auth-services/user`, {
-        method: 'GET',
-        headers: { 
-          'Content-Type': 'application/json',
-          'authorization': `Bearer ${token}`,
-        },
-      }).then( data => {
-        return data.json()
-      }).then( (user) => {
+    }else {
+      fetchApiData('/api/auth-services/user', 'GET').then( ({data: user}) => {
         if(user.permission != 'ADM') Router.push('/')
       })
     }
-
   }, []);
 
   const [input, setInput] = useState('');
@@ -48,18 +42,9 @@ export default function Adm() {
     const formOptions = e.target.firstChild
     const choosenQuery = formOptions.options[formOptions.selectedIndex].value
 
-    const { 'AV--token': token } = parseCookies()
+    const {data: users, status} = await fetchApiData(`/api/adm-services/find-user?key=${choosenQuery}&value=${input}`)
 
-    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/adm-services/find-user?key=${choosenQuery}&value=${input}`, {
-      method: 'GET',
-      headers: { 
-        'Content-Type': 'application/json',
-        'authorization': `Bearer ${token}`,
-      },
-    })
-
-    if(data.status === 200) {
-      const users = await data.json()
+    if(status === 200) {
       setSearchedUsers(users)
     }else {
       console.log('errrrou')
@@ -73,34 +58,14 @@ export default function Adm() {
       tr.style.fontSize = '10pt'
     }, 100)
 
-    updateInputs(searchedUsers[tr.id])
-    setOptionsActiveClass('pts--activeOptions')
+    updateInputs(searchedUsers[tr.id], setInputs)
+    setOptionsActiveClass('activeOptions')
   }
 
-  function updateInputs(newInputs) {
-    setInputs(prevState => {
-      return (
-        {
-        ...prevState,
-        ...newInputs
-        }
-      )
-    })
-  }
+  async function handleUserSubmit() {
+    const {status} = await fetchApiData('/api/adm-services/update-user', 'POST', inputs)
 
-  async function handleConcludeRoute() {
-    const { 'AV--token': token } = parseCookies()
-
-    const data = await fetch(`${process.env.NEXT_PUBLIC_HOME_URL}/api/adm-services/update-user`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify(inputs)
-    })
-
-    if(data.status === 200) {
+    if(status === 200) {
       window.alert('atualizado com sucesso')
     }else {
       window.alert('houve algum erro')
@@ -108,12 +73,12 @@ export default function Adm() {
   }
 
   function handleSetInputs(e) {
-    updateInputs({[e.target.name]: e.target.value})
+    updateInputs({[e.target.name]: e.target.value}, setInputs)
   }
 
   return (
     <div>
-      <form className="adm--search" onSubmit={handleSearchSubmit}>
+      <form className={style.search} onSubmit={handleSearchSubmit}>
         <select name="searchOption">
           <option value="email">email</option>
           <option value="name">nome</option>
@@ -127,7 +92,7 @@ export default function Adm() {
 
       <div>
         {searchedUsers.length > 0 && (
-          <div className="adm--searchedUsers">
+          <div className={style.searchedUsers}>
             <table>
                 <thead>
                   <tr>
@@ -152,12 +117,12 @@ export default function Adm() {
         )}
       </div>
 
-      <div className={`pts--pointOptionsScreen ${optionsActiveClass}`}>
-        <div className="pts--pointOptionsShadow" onClick={() => {
+      <div className={`${pStyle.pointOptionsScreen} ${pStyle[optionsActiveClass]}`}>
+        <div className={pStyle.pointOptionsShadow} onClick={() => {
           setOptionsActiveClass('')
         }}></div>
 
-        <div className="pts--pointOptions">
+        <div className={pStyle.pointOptions}>
           <button onClick={() => {setFadeInWindowActive(true)}}>Editar</button>
 
           <button>
@@ -170,11 +135,11 @@ export default function Adm() {
       <FadeInWindow 
         active={fadeInWindowActive}
         setActive={setFadeInWindowActive}
-        action={handleConcludeRoute}
+        action={handleUserSubmit}
       >
-        <div className="adm--userForm">
+        <div className={style.userForm}>
           <form>
-            <div className="npf--inputDiv">
+            <div className={style.inputDiv}>
               <label htmlFor="npf--name">nome</label>
               <input 
                 type="text" 
@@ -184,7 +149,7 @@ export default function Adm() {
                 onChange={handleSetInputs} 
               />
             </div>
-            <div className="npf--inputDiv">
+            <div className={style.inputDiv}>
               <label htmlFor="npf--permission">permission</label>
               <input 
                 type="text" 
@@ -194,7 +159,7 @@ export default function Adm() {
                 onChange={handleSetInputs} 
               />
             </div>
-            <div className="npf--inputDiv">
+            <div className={style.inputDiv}>
               <label htmlFor="npf--rCount">rCount</label>
               <input 
                 type="text" 

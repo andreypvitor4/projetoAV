@@ -68,7 +68,7 @@ export default function Points(props) {
     return (jaPassou ? {
       background: 'gray',
     } : {
-      background: '#eee',
+      background: 'white',
     })
   }
 

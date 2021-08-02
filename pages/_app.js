@@ -1,5 +1,4 @@
 import '../styles/global.css'
-import '../styles/adm/style.css'
 import { FullLayout, EmptyLayout } from '../components/layout'
 import { AuthProvider } from '../contexts/authContext'
 import LoginAuth from '../components/loginAuth'

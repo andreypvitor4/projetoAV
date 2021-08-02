@@ -8,12 +8,16 @@ export default function FadeInWindow(props) {
     props.active && setActiveClass('deleteActiveClass')
   }, [props.active]);
 
+  const noAction = () => {
+    setActiveClass('')
+    props.setActive(false)
+  }
   return (
     <div className={`${styles.areYouSureScreen} ${styles[activeClass]}`}>
       <div className={styles.areYouSure}>
         <div className={styles.areYouSureChildren}>{props.children}</div>
         <div>
-          <button onClick={props.action}>Continuar</button>
+          <button onClick={props.action || noAction}>Continuar</button>
           <button 
             onClick={() => {setActiveClass(''); props.setActive(false)}}
           >
