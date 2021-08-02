@@ -1,7 +1,6 @@
 import { createContext } from "react";
 import { parseCookies } from 'nookies'
 
-
 const updateInputs = (newInputs, setInputs) => {
   setInputs(prevState => (
       {

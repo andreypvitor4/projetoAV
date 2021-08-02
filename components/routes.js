@@ -28,65 +28,67 @@ export default function Routes(props) {
     })
   }, [])
 
-function handleTouchStart(e) {
-  setTouchStart(e.changedTouches[0].clientX)
-}
 
-function handleTouchMove(e) {
-  const div = e.currentTarget
-  let touchMove = e.changedTouches[0].clientX
-  
-  let touchPosition = touchMove - touchStart
-  if(Math.abs(touchPosition) > 10) {
-    setTouchPosition(touchPosition)
-    div.style.marginLeft = `${touchPosition*1.5}px`
-  
-    let opacity = Math.abs(touchPosition/600)
 
-    if(touchPosition < 0) {
-      div.firstChild.style.background = 'red'
-    }
-    if(touchPosition > 0) {
-      div.firstChild.style.background = 'blue'
-    }
-  
-    div.firstChild.style.display = 'block'
-    div.firstChild.style.opacity = `${opacity}`
+  function handleTouchStart(e) {
+    setTouchStart(e.changedTouches[0].clientX)
   }
-}
 
-function handleTouchEnd(routeId, routeName) {
-  return e => {
+  function handleTouchMove(e) {
     const div = e.currentTarget
-    div.style.marginLeft = `0px`
-  
-    div.firstChild.style.display = 'none'
-    div.firstChild.style.opacity = '0'
+    let touchMove = e.changedTouches[0].clientX
+    
+    let touchPosition = touchMove - touchStart
+    if(Math.abs(touchPosition) > 10) {
+      setTouchPosition(touchPosition)
+      div.style.marginLeft = `${touchPosition*1.5}px`
+    
+      let opacity = Math.abs(touchPosition/600)
 
-    if(touchPosition > 210) {
-      Router.push(`/create-route/${routeId}`)
-    }
-    if(touchPosition < -200) {
-      setFadeInWindowActive(true)
-      setDeleteRouteId(routeId)
-      setRouteToDelete(routeName)
+      if(touchPosition < 0) {
+        div.firstChild.style.background = 'red'
+      }
+      if(touchPosition > 0) {
+        div.firstChild.style.background = 'blue'
+      }
+    
+      div.firstChild.style.display = 'block'
+      div.firstChild.style.opacity = `${opacity}`
     }
   }
-}
 
-async function handleDeleteRoute(e) {
-  let deleteButton = e.currentTarget
+  function handleTouchEnd(routeId, routeName) {
+    return e => {
+      const div = e.currentTarget
+      div.style.marginLeft = `0px`
+    
+      div.firstChild.style.display = 'none'
+      div.firstChild.style.opacity = '0'
 
-  const { status } = await fetchApiData('/api/routes-services/delete-route', 'DELETE', {routeId: deleteRouteId})
+      if(touchPosition > 210) {
+        Router.push(`/create-route/${routeId}`)
+      }
+      if(touchPosition < -200) {
+        setFadeInWindowActive(true)
+        setDeleteRouteId(routeId)
+        setRouteToDelete(routeName)
+      }
+    }
+  }
 
-  if(status === 200) {
-    deleteButton.nextSibling.click()
+  async function handleDeleteRoute(e) {
+    let deleteButton = e.currentTarget
 
-    props.setAllRoutes(allRoutes => (
-      allRoutes.filter((elem) => {
-        return elem._id !== deleteRouteId
-      })
-    ))
+    const { status } = await fetchApiData('/api/routes-services/delete-route', 'DELETE', {routeId: deleteRouteId})
+
+    if(status === 200) {
+      deleteButton.nextSibling.click()
+
+      props.setAllRoutes(allRoutes => (
+        allRoutes.filter((elem) => {
+          return elem._id !== deleteRouteId
+        })
+      ))
     }
   }
 
