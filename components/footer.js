@@ -19,7 +19,7 @@ export default function FooterComponent() {
 
             <div className={styles.iconsContainer}>
                 <div id="icons" className={styles.divIcons}>
-                    <Link href="https://github.com/andreypvitor4">
+                    <Link href="https://github.com/andreypvitor4/projetoAV">
                         <a  className={styles.icon}> <FontAwesomeIcon className={styles.iconImage} icon={faGithub} size="2x"/> </a>
                     </Link>
                     <Link href="https://www.linkedin.com/in/andrey-vitor-862670213/">
