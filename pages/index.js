@@ -4,6 +4,8 @@ import { useState } from 'react'
 import FooterComponent from '../components/footer'
 import styles from '../styles/home/style.module.css'
 import FadeInWindow from '../components/fadeInWindow'
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Home() {
   const [activeHelpWindow, setActiveHelpWindow ] = useState(false);
@@ -16,7 +18,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-    <div className={styles.help} onClick={() => {setActiveHelpWindow(true)}}>?</div>
+    <div className={styles.help} onClick={() => {setActiveHelpWindow(true)}}>
+      <FontAwesomeIcon color="#444" size="2x" icon={faQuestionCircle} />
+    </div>
 
     <FadeInWindow 
       active={activeHelpWindow} 

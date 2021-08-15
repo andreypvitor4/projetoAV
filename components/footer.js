@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { faFacebookSquare } from '@fortawesome/free-brands-svg-icons'
-import { faYoutube } from '@fortawesome/free-brands-svg-icons'
-import { faTiktok } from '@fortawesome/free-brands-svg-icons'
+import { faLinkedin } from '@fortawesome/free-brands-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
@@ -19,17 +19,17 @@ export default function FooterComponent() {
 
             <div className={styles.iconsContainer}>
                 <div id="icons" className={styles.divIcons}>
-                    <Link href="/">
-                        <a  className={styles.icon}> <FontAwesomeIcon className={styles.iconImage} icon={faInstagram} /> </a>
+                    <Link href="https://github.com/andreypvitor4">
+                        <a  className={styles.icon}> <FontAwesomeIcon className={styles.iconImage} icon={faGithub} size="2x"/> </a>
                     </Link>
-                    <Link href="/">
-                        <a  className={styles.icon}> <FontAwesomeIcon className={styles.iconImage} icon={faFacebookSquare} /> </a>
+                    <Link href="https://www.linkedin.com/in/andrey-vitor-862670213/">
+                        <a  className={styles.icon}> <FontAwesomeIcon className={styles.iconImage} icon={faLinkedin} size="2x"/> </a>
                     </Link>
-                    <Link href="/">
-                        <a  className={styles.icon}> <FontAwesomeIcon className={styles.iconImage} icon={faYoutube} /> </a>
+                    <Link href="https://www.facebook.com/andrey.vitor.3">
+                        <a  className={styles.icon}> <FontAwesomeIcon className={styles.iconImage} icon={faFacebookSquare} size="2x"/> </a>
                     </Link>
-                    <Link href="/">
-                        <a  className={styles.icon}> <FontAwesomeIcon className={styles.iconImage} icon={faTiktok} /> </a>
+                    <Link href="https://www.instagram.com/andreypvitor/">
+                        <a  className={styles.icon}> <FontAwesomeIcon className={styles.iconImage} icon={faInstagram} size="2x"/> </a>
                     </Link>
                 </div>
             </div>
@@ -49,9 +49,6 @@ export default function FooterComponent() {
                     <p><FontAwesomeIcon className={styles.iconImage} icon={faWhatsapp} style={{
                         width: '15px'
                     }}/> (19) 9 9997-4291</p>
-                    <p><FontAwesomeIcon className={styles.iconImage} icon={faWhatsapp} style={{
-                        width: '15px'
-                    }}/> (19) 3481-6123</p>
                     <p> <FontAwesomeIcon className={styles.iconImage} icon={faEnvelope} style={{
                         width: '15px'
                     }}/> andreypvitor@gmail.com</p>

@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import Link from "next/link"
 import { useState, useContext, useRef } from 'react'
-import Router from 'next/router'
 import Image from 'next/image'
 import logo from '../public/logoAV.png'
 import { AuthContext } from '../contexts/authContext'
